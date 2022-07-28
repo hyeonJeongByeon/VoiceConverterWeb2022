@@ -1,0 +1,334 @@
+/* Page Formatting */
+
+* {
+	margin:0;
+	padding:0;
+	}
+
+body {
+	background-color:#ffffff;
+	font:12px "Trebuchet MS", Arial, Verdana;
+	color:#555555;
+	text-align:left;
+}
+a {
+	color:#8bbc70;
+	text-decoration:none;
+	}
+a:hover {
+	color:#555555;
+	text-decoration:none;
+	}
+img, img a {
+	border:0;
+	}
+p {
+	line-height:1.7em;
+	margin-bottom:20px;
+}
+
+h1 {
+	font-size:24px;
+}
+
+h2 {
+	font-size:18px;
+}
+
+h3 {
+	font-size:14px;
+}
+
+/* Header Area */
+#topLine {
+	height:50px;
+	border-bottom:15px solid #DEEAFA;
+}
+
+#header{
+	width:693px;
+	margin:10px auto 0px auto;
+	padding:10px;
+	}
+	
+#header h1{
+	width:220px;
+	margin:25px 0 0 0;
+	background:#ffffff;
+	padding:5px 0px 5px 20px;
+}
+
+#header h1 span{
+	color:#8bbc70;
+	font-size:110%;
+}
+
+
+/* Page Wrappers */
+#outerwarrper {
+	width:693px;
+	margin:30px auto 0 auto;
+	padding:10px;
+}
+
+#wrapper {
+	margin-top:1px;
+	width:693px;
+}
+
+/* Content Area */
+#content {
+	width:450px;
+	margin:10px auto;
+}
+
+
+
+#content h2 {
+	margin: 0 20px 0 20px;
+	padding: 20px 5px 0 5px;
+	border-bottom: 5px solid #8bbc70;
+}
+
+#content p {
+	margin: 0 20px 0 20px;
+	padding: 10px 5px 0 5px;
+}
+
+#content p img {
+	float:left;
+	padding-right:15px
+}
+
+#content table {
+	width:400px;
+	margin: 0 20px 0 20px;
+	padding: 10px 5px 0 5px;
+}
+
+#content table td.row_headers {
+	background:#DEEAFA;
+	text-align:center;
+}
+
+#content table td {
+	padding: 1px 5px 1px 10px;
+	background:#E5EFE0;
+}
+
+#content form {
+width:450px; 
+padding:10px;  
+}
+
+#content form label { 
+	display:block; 
+	float:left; 
+	width:100px; 
+	text-align:right; 
+	padding-right:10px;
+	margin-left:-15px; 
+	margin-bottom:0.5em;
+}
+
+#content form input {
+	border:1px solid #fff;
+	background:#FFFFA0;
+	padding-left:0.5em; 
+}
+
+#content form #send, form #button2 {
+	background:#FFFFA0;
+	padding-right:0.5em; 
+	cursor:pointer; 
+	width:200px;  
+	margin-left:125px;
+	font-weight:bold;
+	color:#555555;
+}
+
+#content form #send:hover, form #button2:hover {
+	background-position:center left; 
+	color:#8BBC70;
+	font-weight:bold;
+}
+
+#original_voice {
+    margin: 40px 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+}
+
+#original_voice > input {
+    margin-bottom: 8px;
+}
+
+#record_voice {
+    margin: 40px 0 50px 0;
+}
+
+.record-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.record-box > * {
+    margin-left: 8px;
+}
+
+#sound-clips > .clip {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.adjust-voice {
+    margin: 30px 0 30px 0;
+}
+
+.adjust-voice-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.adjust-voice-row a {
+    margin-left: 8px;
+    font-size: 18px;
+}
+
+.adjust-voice-row .range-bar {
+    margin-left: 8px;
+}
+
+.adjust-voice-row .tooltip {
+    font-size: 18px;
+    width: 80px;
+}
+
+.manipulated-wrapper, #manipulated-voice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* style2.css*/
+
+
+form .row{
+  display: flex;
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+form .row label{
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+form .row:nth-child(2) label{
+  font-size: 17px;
+}
+form :where(textarea, select, button){
+  outline: none;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 5px;
+}
+form .row textarea{
+  resize: none;
+  height: 110px;
+  font-size: 15px;
+  padding: 8px 10px;
+  border: 1px solid #999;
+}
+form .row textarea::-webkit-scrollbar{
+  width: 0px;
+}
+form .row .outer{
+  height: 47px;
+  display: flex;
+  padding: 0 10px;
+  align-items: center;
+  border-radius: 5px;
+  justify-content: center;
+  border: 1px solid #999;
+}
+form .row select{
+  font-size: 14px;
+  background: none;
+}
+form .row select::-webkit-scrollbar{
+  width: 8px;
+}
+form .row select::-webkit-scrollbar-track{
+  background: #fff;
+}
+form .row select::-webkit-scrollbar-thumb{
+  background: #888;
+  border-radius: 8px;
+  border-right: 2px solid #ffffff;
+}
+form button{
+  height: 52px;
+  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
+  margin-top: 10px;
+  background: #8bbc70;
+  transition: 0.3s ease;
+}
+form button:hover{
+  background: #8bbc70;
+}
+
+
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+  
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+  
+	/* Fade in tooltip */
+	opacity: 0;
+	transition: opacity 0.3s;
+  }
+  
+  /* Tooltip arrow */
+  .tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+  }

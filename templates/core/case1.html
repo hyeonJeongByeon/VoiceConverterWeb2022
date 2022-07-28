@@ -1,0 +1,262 @@
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+  <style>
+    body
+    {
+      margin: 0 auto;
+      width: 700px;
+    }
+    </style>
+<head>
+<title>Voice Converter</title>
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
+
+<meta charset="utf-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--[if IE]>
+<style type="text/css" media="screen">
+@import "ie.css";
+</style>
+<![endif]-->
+</head>
+<body>
+<div id="topLine">
+  <div id="header">
+    <h1><span>Voice</span>Converter<span>Web</span></h1>
+  </div>
+</div>
+<div id="outerwarrper">
+  <div id="wrapper">
+    <div id="content">
+      <h2>Input 1. Upload your voice</h2>
+      <div id="original_voice">
+        <input type="file" accept="audio/*" capture id="upload-your-voice" />
+        <audio id="upload-your-voice-player" controls>
+          <script>
+            const yourVoiceUploader = document.getElementById('upload-your-voice');
+            const yourVoicePlayer = document.getElementById('upload-your-voice-player');
+        
+            yourVoiceUploader.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+
+              // Show audio
+              yourVoicePlayer.src = url;
+ 
+            });
+          </script>
+        </audio>
+      </div>
+
+      <h2>Input 2. Record your voice</h2>
+      <div id="record_voice">
+        <div style="display: none;">
+            <input type=checkbox id="chk-hear-mic" style="margin-left: 10px;"><label for="chk-hear-mic"><span> Echo</span> mic</label>
+        </div>
+        <div class="record-box">
+            <button id="record">  Record </button>
+            <button id="stop">  Stop </button>
+        </div>
+        <div id="sound-clips" style="margin-top: 10px; margin-bottom: 10px;"></div>
+        <script>
+            const record = document.getElementById("record")
+            const stop = document.getElementById("stop")
+            const soundClips = document.getElementById("sound-clips")
+            const chkHearMic = document.getElementById("chk-hear-mic")
+        
+            const audioCtx = new(window.AudioContext || window.webkitAudioContext)() // 오디오 컨텍스트 정의
+        
+            const analyser = audioCtx.createAnalyser()
+            //        const distortion = audioCtx.createWaveShaper()
+            //        const gainNode = audioCtx.createGain()
+            //        const biquadFilter = audioCtx.createBiquadFilter()
+        
+            function makeSound(stream) {
+                const source = audioCtx.createMediaStreamSource(stream)
+        
+                source.connect(analyser)
+                //            analyser.connect(distortion)
+                //            distortion.connect(biquadFilter)
+                //            biquadFilter.connect(gainNode)
+                //            gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
+                analyser.connect(audioCtx.destination)
+        
+            }
+        
+            if (navigator.mediaDevices) {
+                console.log('getUserMedia supported.')
+        
+                const constraints = {
+                    audio: true
+                }
+                let chunks = []
+        
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(stream => {
+        
+                        const mediaRecorder = new MediaRecorder(stream)
+                        
+                        chkHearMic.onchange = e => {
+                            if(e.target.checked == true) {
+                                audioCtx.resume()
+                                makeSound(stream)
+                            } else {
+                                audioCtx.suspend()
+                            }
+                        }
+                        
+                        record.onclick = () => {
+                            mediaRecorder.start()
+                            console.log(mediaRecorder.state)
+                            console.log("recorder started")
+                            record.style.background = "red"
+                            record.style.color = "black"
+                        }
+        
+                        stop.onclick = () => {
+                            mediaRecorder.stop()
+                            console.log(mediaRecorder.state)
+                            console.log("recorder stopped")
+                            record.style.background = ""
+                            record.style.color = ""
+                        }
+        
+                        mediaRecorder.onstop = e => {
+                            console.log("data available after MediaRecorder.stop() called.")
+        
+                            const clipName = prompt("오디오 파일 제목을 입력하세요.", new Date())
+        
+                            const clipContainer = document.createElement('article')
+                            const clipLabel = document.createElement('p')
+                            const audio = document.createElement('audio')
+                            const deleteButton = document.createElement('button')
+        
+                            clipContainer.classList.add('clip')
+                            audio.setAttribute('controls', '')
+                            deleteButton.innerHTML = "삭제"
+                            clipLabel.innerHTML = clipName
+        
+                            clipContainer.appendChild(audio)
+                            clipContainer.appendChild(clipLabel)
+                            clipContainer.appendChild(deleteButton)
+                            soundClips.appendChild(clipContainer)
+        
+                            audio.controls = true
+                            const blob = new Blob(chunks, {
+                                'type': 'audio/ogg codecs=opus'
+                            })
+                            chunks = []
+                            const audioURL = URL.createObjectURL(blob)
+                            audio.src = audioURL
+                            console.log("recorder stopped")
+        
+                            deleteButton.onclick = e => {
+                                evtTgt = e.target
+                                evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode)
+                            }
+                        }
+        
+                        mediaRecorder.ondataavailable = e => {
+                            chunks.push(e.data)
+                        }
+                    })
+                    .catch(err => {
+                        console.log('The following error occurred: ' + err)
+                    })
+            }
+        </script>
+        </div>
+
+      <h2>Upload target voice</h2>
+      <div id="original_voice">
+        <input type="file" accept="audio/*" capture id="upload-target-voice" />
+        <audio id="upload-target-voice-player" controls>
+          <script>
+            const targetVoiceUploader = document.getElementById('upload-target-voice');
+            const targetVoicePlayer = document.getElementById('upload-target-voice-player');
+        
+            targetVoiceUploader.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+              
+              // Show audio
+              targetVoicePlayer.src = url;
+ 
+            });
+          </script>
+        </audio>
+      </div>
+
+      <form>
+        <div class="adjust-voice-row">
+            <div class="tooltip">reflect
+                <span class="tooltiptext">reflect</span>
+            </div>
+            <div class="range-bar">
+                <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05">
+            </div>
+        </div>
+      <button type="button" id="submit-btn"> Submit </button>
+      </form>
+      
+      <h2>Output. Converted Voice</h2>
+      <!--변환된 목소리를 들려줌-->
+      <div id="original_voice">
+        <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
+        </div>
+
+          <script>
+            var reflectInput = document.getElementById('reflect');
+
+            var manipulatedVoiceContainer = document.getElementById('manipulated-voice-container')
+
+
+            var submit_btn = document.getElementById('submit-btn');
+            submit_btn.addEventListener('click', async function() {
+             var yourAudio = yourVoiceUploader.files[0];
+             var targetAudio = targetVoiceUploader.files[0];
+
+             // validate audio
+             if(!yourAudio || !targetAudio) {
+                alert('원본 음성과 타겟 음성을 선택해야 합니다');
+                return
+             }
+
+
+              var reflectValue = reflectInput.value;
+    
+              // Send file to server
+              let formData = new FormData();           
+              formData.append("yourAudio", yourAudio);
+              formData.append("targetAudio", targetAudio);
+              formData.append("reflectValue", reflectValue);
+  
+  
+              response = await fetch('{% url "manipulate_audio_with_target" %}', {
+                method: "POST", 
+                body: formData
+              });
+  
+              var { manipulated_sound_url } = await response.json()
+              // Insert sound 
+              manipulatedVoiceContainer.innerHTML += `
+                <div style="margin: 10px 0;">
+                  <audio id="player" controls src=${manipulated_sound_url}>  
+                </div>
+              `
+            })
+          </script>
+        </audio>
+      </div>
+
+      </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

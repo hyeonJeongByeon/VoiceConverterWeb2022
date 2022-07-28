@@ -1,0 +1,14 @@
+#venv
+myvenv
+
+#pycache
+__pycache__
+
+#media
+media
+
+# db
+db.sqlite3
+
+# local
+run_debug_server.sh
