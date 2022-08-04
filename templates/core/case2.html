@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Voice Converter</title>
+<title>Case 2. Voice Converter</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -190,6 +190,11 @@
 
       <h2> Adjust voice features</h2>
       <h3>Instructions</h3>
+      <div class="subbtn-container">
+        <button type="button" id="switch-gender-btn"> Switch gender </button>
+        <button type="button" id="switch-child-btn"> Child ver. </button>
+      </div>
+
       <div id="slider_div">
         <form >
             <div class="adjust-voice">
@@ -248,7 +253,10 @@
             <div id="">
 
             </div>
-          <button type="button" id="submit-btn"> Submit </button>
+
+          <button type="button" id="reset-btn" class="half-btn"> Reset </button>
+          <button type="button" id="submit-btn" class="half-btn"> Submit </button>
+
           </form>
           <script src="https://use.fontawesome.com/66a8bce253.js"></script>
 
@@ -269,6 +277,35 @@
           var recoderInput = document.getElementById('recorder');
 
           var manipulatedVoiceContainer = document.getElementById('manipulated-voice-container')
+
+          function insertResultVoice(params) {
+            const {manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value} = params;
+            // Insert sound 
+            manipulatedVoiceContainer.innerHTML = `
+            <div style="margin: 10px 0; width: 80%;">
+              <audio id="player" controls src=${manipulated_sound_url} style="width: 100%;">
+              </audio>
+              <div class="audio-result-container">
+                <div>
+                  <span class="bold">pitch: </span> <span>${parseInt(pitchValue)}</span>
+                </div>
+                <div>
+                  <span class="bold">f1: </span> <span>${parseInt(f1Value)}</span>
+                </div>
+                <div>
+                  <span class="bold">f2: </span> <span>${parseInt(f2Value)}</span>
+                </div>
+                <div>
+                  <span class="bold">f3: </span> <span>${parseInt(f3Value)}</span>
+                </div>
+                <div>
+                  <span class="bold">f4: </span> <span>${parseInt(f4Value)}</span>
+                </div>
+              </div>
+            </div>
+            ${manipulatedVoiceContainer.innerHTML}
+          `
+          }
 
           var submit_btn = document.getElementById('submit-btn');
           submit_btn.addEventListener('click', async function() {
@@ -307,12 +344,24 @@
             });
 
             var { manipulated_sound_url } = await response.json()
-            // Insert sound 
-            manipulatedVoiceContainer.innerHTML += `
-              <div style="margin: 10px 0;">
-                <audio id="player" controls src=${manipulated_sound_url}>  
-              </div>
-            `
+
+            insertResultVoice({
+              manipulated_sound_url,
+              pitchValue,
+              f1Value,
+              f2Value,
+              f3Value,
+              f4Value,
+            })
+          })
+
+          var resetBtn = document.getElementById('reset-btn')
+          resetBtn.addEventListener('click', function() {
+            pitchInput.value = localStorage.getItem('original_pitch');
+            f1Input.value = localStorage.getItem('original_f1');
+            f2Input.value = localStorage.getItem('original_f2');
+            f3Input.value = localStorage.getItem('original_f3');
+            f4Input.value = localStorage.getItem('original_f4');
           })
         </script>
 
@@ -349,6 +398,79 @@
               localStorage.setItem('original_f3', f3);
               localStorage.setItem('original_f4', f4);
             }
+        </script>
+
+        <script>
+          var switchGenderBtn = document.getElementById('switch-gender-btn');
+
+          switchGenderBtn.addEventListener('click', async function() {
+            console.log('called')
+            const file = recoderInput.files[0];
+
+            // Send file to server
+            let formData = new FormData();           
+            formData.append("audio", file);
+
+            response = await fetch('{% url "switch_gender" %}', {
+              method: "POST", 
+              body: formData
+            });
+
+            var { manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value } = await response.json()     
+            
+            // Change bar input
+            pitchInput.value = pitchValue;
+            f1Input.value = f1Value;
+            f2Input.value = f2Value;
+            f3Input.value = f3Value;
+            f4Input.value = f4Value;
+
+            // Insert result voice
+            insertResultVoice({
+              manipulated_sound_url,
+              pitchValue,
+              f1Value,
+              f2Value,
+              f3Value,
+              f4Value,
+            })
+          })
+        </script>
+
+        <script>
+          var switchChildBtn = document.getElementById('switch-child-btn');
+
+          switchChildBtn.addEventListener('click', async function() {
+            const file = recoderInput.files[0];
+
+            // Send file to server
+            let formData = new FormData();           
+            formData.append("audio", file);
+
+            response = await fetch('{% url "switch_child" %}', {
+              method: "POST", 
+              body: formData
+            });
+
+            var { manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value } = await response.json()     
+            
+            // Change bar input
+            pitchInput.value = pitchValue;
+            f1Input.value = f1Value;
+            f2Input.value = f2Value;
+            f3Input.value = f3Value;
+            f4Input.value = f4Value;
+
+            // Insert result voice
+            insertResultVoice({
+              manipulated_sound_url,
+              pitchValue,
+              f1Value,
+              f2Value,
+              f3Value,
+              f4Value,
+            })
+          })
         </script>
 
       </div>

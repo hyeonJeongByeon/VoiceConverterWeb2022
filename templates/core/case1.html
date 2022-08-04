@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Voice Converter</title>
+<title>Case 1. Voice Converter</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -241,11 +241,21 @@
   
               var { manipulated_sound_url } = await response.json()
               // Insert sound 
-              manipulatedVoiceContainer.innerHTML += `
-                <div style="margin: 10px 0;">
-                  <audio id="player" controls src=${manipulated_sound_url}>  
+              manipulatedVoiceContainer.innerHTML = `
+              <div style="margin: 10px 0; width: 80%;">
+                <audio id="player" controls src=${manipulated_sound_url} style="width: 100%;">
+                </audio>
+                <div class="audio-result-container">
+                  <div>
+                    <span class="bold">your voice: </span> <span>${parseInt((1 - reflectValue) * 100)}%</span>
+                  </div>
+                  <div>
+                    <span class="bold">target voice: </span> <span>${parseInt(reflectValue * 100)}%</span>
+                  </div>
                 </div>
-              `
+              </div>
+              ${manipulatedVoiceContainer.innerHTML}
+            `
             })
           </script>
         </audio>

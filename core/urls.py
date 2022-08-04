@@ -10,6 +10,6 @@ urlpatterns = [
     path('calculate_audio_feature/', calculate_audio_feature, name='calculate_audio_feature'),
     path('manipulate_audio_with_target/', manipulate_audio_with_target, name='manipulate_audio_with_target'),
     path('convert_text_to_audio/', convert_text_to_audio, name='convert_text_to_audio'),
-
-
+    path('switch_gender/', switch_gender, name='switch_gender'),
+    path('switch_child/', switch_child, name='switch_child'),
 ]

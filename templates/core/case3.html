@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Voice Converter</title>
+<title>Case 3. Voice Converter</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -100,7 +100,7 @@
           // Insert sound 
           ttsVoiceContainer.innerHTML = `
           <div style="margin: 10px 0;">
-              <audio id="player" controls src=${file_url}>  
+              <audio id="player" controls src=${file_url} />
             </div>
           `
         })
@@ -135,10 +135,11 @@
 
             var { manipulated_sound_url, original_uploaded_file_url } = await response.json()
             // Insert sound 
-            manipulatedVoiceContainer.innerHTML += `
+            manipulatedVoiceContainer.innerHTML = `
               <div style="margin: 10px 0;">
                 <audio id="player" controls src=${manipulated_sound_url}>  
               </div>
+              ${manipulatedVoiceContainer.innerHTML}
             `
 
             ttsVoiceContainer.innerHTML = `

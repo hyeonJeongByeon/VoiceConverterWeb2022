@@ -109,3 +109,69 @@ def convert_text_to_audio(request):
         response.update(result)
 
     return JsonResponse(response)
+
+@csrf_exempt
+def switch_gender(request):
+    text_for_tts = request.POST.get('textForTTS', None)
+
+    if text_for_tts:
+        # original audio comes from text (tts)
+        filename, filepath, uploaded_file_url = save_audio_by_text(text_for_tts)
+    else:
+        # original audio comes from uploaded file
+        filename, filepath, uploaded_file_url = save_uploaded_file(request.FILES['audio'])
+
+    # make sound
+    original_sound = get_sound(filepath)
+
+    # switch gender
+    manipulated_sound = switch_gender_sound(original_sound)
+
+    # save manipulated_sound
+    manipulated_sound_url = save_sound_file(manipulated_sound, filename)
+
+    # calculate formant and pitch
+    manipulated_formant = measure_formant(manipulated_sound)
+    manipulated_pitch = measure_pitch(manipulated_sound)
+
+    return JsonResponse({
+        'manipulated_sound_url': manipulated_sound_url,
+        'pitchValue': manipulated_pitch["Mean Pitch (F0)"],
+        'f1Value': manipulated_formant["F1 Mean"],
+        'f2Value': manipulated_formant["F2 Mean"],
+        'f3Value': manipulated_formant["F3 Mean"],
+        'f4Value': manipulated_formant["F4 Mean"],
+    })
+
+@csrf_exempt
+def switch_child(request):
+    text_for_tts = request.POST.get('textForTTS', None)
+
+    if text_for_tts:
+        # original audio comes from text (tts)
+        filename, filepath, uploaded_file_url = save_audio_by_text(text_for_tts)
+    else:
+        # original audio comes from uploaded file
+        filename, filepath, uploaded_file_url = save_uploaded_file(request.FILES['audio'])
+
+    # make sound
+    original_sound = get_sound(filepath)
+
+    # switch gender
+    manipulated_sound = switch_child_sound(original_sound)
+
+    # save manipulated_sound
+    manipulated_sound_url = save_sound_file(manipulated_sound, filename)
+
+    # calculate formant and pitch
+    manipulated_formant = measure_formant(manipulated_sound)
+    manipulated_pitch = measure_pitch(manipulated_sound)
+
+    return JsonResponse({
+        'manipulated_sound_url': manipulated_sound_url,
+        'pitchValue': manipulated_pitch["Mean Pitch (F0)"],
+        'f1Value': manipulated_formant["F1 Mean"],
+        'f2Value': manipulated_formant["F2 Mean"],
+        'f3Value': manipulated_formant["F3 Mean"],
+        'f4Value': manipulated_formant["F4 Mean"],
+    })

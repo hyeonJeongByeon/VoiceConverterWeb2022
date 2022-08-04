@@ -77,3 +77,36 @@ def manipulate_voice(file_path, sound, original_pitch, original_formant, new_pit
 
 def get_sound(filename):
   return parselmouth.Sound(filename)
+
+def switch_gender_sound(sound):
+  call(sound, "Scale intensity", 70)
+  pitch = call(sound, "To Pitch", 0.0, 60, 500)
+  meanF0 = call(pitch, "Get mean", 0, 0, "Hertz")
+
+  if meanF0 > 159:
+    gender = "female"
+  else:
+    gender = "male"
+
+  if gender == "female":
+    switched_sound = call(sound, "Change gender", 60, 500, 0.8, 100, 1, 1)
+  elif gender == "male":
+    switched_sound = call(sound, "Change gender", 60, 500, 1.2, 220, 1, 1)
+
+  return switched_sound
+
+def switch_child_sound(sound):
+  call(sound, "Scale intensity", 70)
+  pitch = call(sound, "To Pitch", 0.0, 60, 500)
+  meanF0 = call(pitch, "Get mean", 0, 0, "Hertz")
+
+  if meanF0 > 159:
+    gender = "female"
+  else:
+    gender = "male"
+
+  if gender == "female":
+    switched_sound = call(sound, "Change gender", 60, 500, 1.5, 350, 1, 1)
+  elif gender == "male":
+    switched_sound = call(sound, "Change gender", 60, 500, 1.6, 350, 1, 1)
+  return switched_sound
