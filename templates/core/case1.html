@@ -24,13 +24,13 @@
 <body>
 <div id="topLine">
   <div id="header">
-    <h1><span>Voice</span>Converter<span>Web</span></h1>
+    <h1><span>목소리</span>변환<span>시스템</span></h1>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
-      <h2>Input 1. Upload your voice</h2>
+      <h2>본인의 목소리를 업로드 해주세요</h2>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="upload-your-voice" />
         <audio id="upload-your-voice-player" controls>
@@ -50,7 +50,7 @@
         </audio>
       </div>
 
-      <h2>Input 2. Record your voice</h2>
+      <h2>(삭제예정)본인의 목소리를 녹음해주세요</h2>
       <div id="record_voice">
         <div style="display: none;">
             <input type=checkbox id="chk-hear-mic" style="margin-left: 10px;"><label for="chk-hear-mic"><span> Echo</span> mic</label>
@@ -169,7 +169,7 @@
         </script>
         </div>
 
-      <h2>Upload target voice</h2>
+      <h2>타겟 화자의 목소리를 업로드해주세요</h2>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="upload-target-voice" />
         <audio id="upload-target-voice-player" controls>
@@ -191,17 +191,17 @@
 
       <form>
         <div class="adjust-voice-row">
-            <div class="tooltip">reflect
-                <span class="tooltiptext">reflect</span>
+            <div class="tooltip">반영도
+                <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다.</span>
             </div>
             <div class="range-bar">
                 <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05">
             </div>
         </div>
-      <button type="button" id="submit-btn"> Submit </button>
+      <button type="button" id="submit-btn"> 제출 </button>
       </form>
       
-      <h2>Output. Converted Voice</h2>
+      <h2>변환된 음성</h2>
       <!--변환된 목소리를 들려줌-->
       <div id="original_voice">
         <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
