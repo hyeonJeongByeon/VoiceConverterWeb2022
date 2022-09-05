@@ -1,0 +1,89 @@
+{% comment %} 정답음성
+7가지 속성 중에서 우세한 속성 띄우고
+그 속성에서 가장 비슷한(유사도가 높은) top 10 목소리 보여주고 고르기 {% endcomment %}
+{% comment %} //UI 설명
+정답 음성
+비슷한 것 Top 10 소팅된 결과 + pitch 100 f1 20 등 목소리와 수치를 같이 보여줌 {% endcomment %}
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+  <style>
+    body
+    {
+      margin: 0 auto;
+      width: 700px;
+    }
+    </style>
+<head>
+<title>Case 1. Voice Converter</title>
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
+
+<meta charset="utf-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--[if IE]>
+<style type="text/css" media="screen">
+@import "ie.css";
+</style>
+<![endif]-->
+</head>
+<body>
+<div id="topLine">
+  <div id="header">
+    <h1><span>목소리</span>변환<span>시스템</span></h1>
+    <h2>다음의 목소리를 듣고 아래의 슬라이더를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
+  </div>
+</div>
+<div id="outerwarrper">
+  <div id="wrapper">
+    <div id="content">
+      <h2>정답 음성</h2>
+      <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합하여 제작된 음성입니다. 반영도 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
+      <div id="original_voice">
+        <audio id="answer-voice-player" controls src="{{original_audio_url}}">
+        </audio>
+        <form method='POST'>
+            {% csrf_token %}
+            <label for="feature">Choose a feature:</label>
+
+            <select name="feature" id="feature">
+                <option value="breathiness">숨소리가 많다</option>
+                <option value="hoarseness">거칠다</option>
+                <option value="pitch">높다</option>
+                <option value="precise">발음이 명확하다</option>
+                <option value="speed">빠르다</option>
+                <option value="variation">음 높낮이가 크다</option>
+                <option value="volume">음량이 높다</option>
+            </select>
+
+            <button type="submit">Get Top10</button>
+        </form>
+      </div>
+
+
+      <h2>Top10</h2>
+      <h3>이용된 목소리..?</h3>
+      <div id="original_voice">
+        {% for data in top10_desc %}
+        <div style="margin: 10px 0; width: 80%;">
+          <audio id="player" controls src="{{data.url}}" style="width: 100%;">
+          </audio>
+          <div class="audio-result-container">
+            <div>
+              <span class="bold">euclidean: </span> <span>{{data.euclidean}}</span>
+            </div>
+            
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+     
+
+      
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

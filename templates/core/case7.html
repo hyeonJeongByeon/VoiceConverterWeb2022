@@ -1,0 +1,76 @@
+{% comment %} 정답 음성 + 해쉬태그
+해시태그가 많이 겹치는 순으로 top 10 정렬 + 목소리 + 해쉬태그 보여주기 {% endcomment %}
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+  <style>
+    body
+    {
+      margin: 0 auto;
+      width: 700px;
+    }
+    </style>
+<head>
+<title>Case 1. Voice Converter</title>
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
+
+<meta charset="utf-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--[if IE]>
+<style type="text/css" media="screen">
+@import "ie.css";
+</style>
+<![endif]-->
+<style>
+    .hashtag-container > span {
+        margin-right: 8px;
+
+    }
+</style>
+</head>
+<body>
+<div id="topLine">
+  <div id="header">
+    <h1><span>목소리</span>변환<span>시스템</span></h1>
+    <h2>다음의 목소리를 듣고 아래의 슬라이더를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
+  </div>
+</div>
+<div id="outerwarrper">
+  <div id="wrapper">
+    <div id="content">
+      <h2>정답 음성</h2>
+      <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합하여 제작된 음성입니다. </h3>
+      <div id="original_voice">
+        <audio id="answer-voice-player" controls src="{{answer.audio_url}}">
+        </audio>
+        <div class="hashtag-container">
+            {% for hashtag in answer.hashtag %}
+                <span>#{{hashtag}}</span> 
+            {% endfor %}
+        </div>
+      </div>
+
+
+      <h2>해쉬태그 검색 결과</h2>
+      {% for section in compare %}
+      <h3>{{section.label}}</h3>
+        {% for data in section.data %}
+            <div id="original_voice">
+                <audio id="answer-voice-player" controls src="{{data.audio_url}}">
+                </audio>
+                <div class="hashtag-container">
+                    {% for hashtag in data.hashtag %}
+                        <span>#{{hashtag}}</span> 
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

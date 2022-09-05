@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+  <style>
+    body
+    {
+      margin: 0 auto;
+      width: 700px;
+    }
+    </style>
+<head>
+<title>Case 3. Voice Converter</title>
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
+
+<meta charset="utf-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--[if IE]>
+<style type="text/css" media="screen">
+@import "ie.css";
+</style>
+<![endif]-->
+</head>
+<body>
+<div id="topLine">
+  <div id="header">
+    <h1><span>목소리</span>변환<span>시스템</span></h1>
+  </div>
+</div>
+<div id="outerwarrper">
+  <div id="wrapper">
+    <div id="content">
+      <h2>텍스트-음성 변환</h2>
+      <div style="box-sizing: border-box; width: 100%; padding: 16px 48px;">
+        <textarea id="text" name="text" rows="6" style="box-sizing: border-box; width: 100%; padding: 8px;"></textarea>
+      </div>
+
+      <form>
+        <button type="button" id="tts-upload-btn"> 음성 재생하기 </button>
+    </form>
+    
+      <div id="tts-voice-container" style="display: flex; justify-content: center;">
+      </div>
+
+
+      <h2>타겟 목소리를 업로드하세요</h2>
+      <div id="original_voice">
+        <input type="file" accept="audio/*" capture id="recorder" />
+        <audio id="player" controls>
+          <script>
+            const recorder = document.getElementById('recorder');
+            const player = document.getElementById('player');
+        
+            recorder.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+              // Show audio
+              player.src = url;
+  
+            });
+          </script>
+        </audio>
+      </div>
+
+      <form>
+      <button type="button" id="submit-btn"> 제출 </button>
+        </form>
+      
+      
+    <h2>변환된 음성</h2>
+    <!--변환된 목소리를 들려줌-->
+    <div id="original_voice">
+      <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
+      </div>
+      <script>
+        var ttsVoiceContainer = document.getElementById('tts-voice-container')
+
+        var tts_upload_btn = document.getElementById('tts-upload-btn');
+        tts_upload_btn.addEventListener('click', async function() {
+
+         var textValue = textInput.value;
+
+         // validate text
+         if(!textValue) {
+            alert('텍스트를 입력해야 합니다');
+            return 
+         }
+
+          // Send file to server
+          let formData = new FormData();           
+          formData.append("textForTTS", textValue);
+
+
+          response = await fetch('{% url "convert_text_to_audio" %}', {
+            method: "POST", 
+            body: formData
+          });
+
+          var { file_url } = await response.json()
+          // Insert sound 
+          ttsVoiceContainer.innerHTML = `
+          <div style="margin: 10px 0;">
+              <audio id="player" controls src=${file_url} />
+            </div>
+          `
+        })
+      </script>
+
+        <script>
+          var manipulatedVoiceContainer = document.getElementById('manipulated-voice-container')
+          var textInput = document.getElementById('text');
+
+          var submit_btn = document.getElementById('submit-btn');
+          submit_btn.addEventListener('click', async function() {
+
+           var textValue = textInput.value;
+           var audio = recorder.files[0];
+
+           // validate audio
+           if(!textValue || !audio) {
+              alert('텍스트와 음성 파일이 필수입니다');
+              return 
+           }
+  
+            // Send file to server
+            let formData = new FormData();           
+            formData.append("textForTTS", textValue);
+            formData.append("targetAudio", audio);
+
+
+            response = await fetch('{% url "manipulate_audio_with_target" %}', {
+              method: "POST", 
+              body: formData
+            });
+
+            var { manipulated_sound_url, original_uploaded_file_url } = await response.json()
+            // Insert sound 
+            manipulatedVoiceContainer.innerHTML = `
+              <div style="margin: 10px 0;">
+                <audio id="player" controls src=${manipulated_sound_url}>  
+              </div>
+              ${manipulatedVoiceContainer.innerHTML}
+            `
+
+            ttsVoiceContainer.innerHTML = `
+            <div style="margin: 10px 0;">
+                <audio id="player" controls src=${original_uploaded_file_url}>  
+              </div>
+            `
+          })
+        </script>
+    </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

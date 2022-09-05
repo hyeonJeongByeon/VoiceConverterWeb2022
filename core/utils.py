@@ -3,14 +3,28 @@ from django.conf import settings
 
 from core.manipulator.voice_manipulator import *
 from core.manipulator.voice_filter import *
+from voice_django.settings.base import S3_URL
 
 import os
 from gtts import gTTS
 from datetime import datetime
+from fastdtw import fastdtw
+import pickle
 
-def save_uploaded_file(file):
+
+def get_project_file_path(postfixes: list):
+    from voice_django.settings.base import BASE_DIR
+    return os.path.join(BASE_DIR, *postfixes)
+
+def get_s3_file_url(filename):
+    return f'{S3_URL}recordings/{filename}.mp3'
+
+def save_uploaded_file(file, name=None):
     fs = FileSystemStorage()
-    filename = fs.save(file.name, file)
+    if name:
+        filename = fs.save(name, file)
+    else:
+        filename = fs.save(file.name, file)
     filepath = fs.path(filename)
     uploaded_file_url = fs.url(filename)
 
@@ -51,6 +65,7 @@ def calculate_audio_features_by_filepath(filepath):
     # Calculate audio feature
     pitchs = measure_pitch(sound)
     formants = measure_formant(sound)
+    duration = sound.get_total_duration()
 
     result = {
         'pitch': pitchs["Mean Pitch (F0)"],
@@ -58,6 +73,55 @@ def calculate_audio_features_by_filepath(filepath):
         'f2': formants["F2 Mean"],
         'f3': formants["F3 Mean"],
         'f4': formants["F4 Mean"],
+        'duration': duration,
     }
 
     return result
+
+def hashtag_feature(sound, choice):
+  from scipy.spatial.distance import euclidean
+  pickle_path = get_project_file_path(["feature.pickle"])
+  with open (pickle_path, "rb") as fr:
+    feature = pickle.load(fr)
+
+  files = feature[choice]
+  print(files)
+  candidates = {}
+
+  for filename in files:
+    filepath = get_project_file_path(['media','recordings', f'{filename}.mp3'])
+    sound_comp = parselmouth.Sound(filepath)
+
+    if sound.values.shape[1] >= sound_comp.values.shape[1]:
+      distance, path = fastdtw(sound.values[:, sound_comp.values.shape[1]], sound_comp.values, dist=euclidean)
+    else:
+      distance, path = fastdtw(sound.values, sound_comp.values[:, sound.values.shape[1]], dist=euclidean)
+
+    candidates[filename] = distance
+
+  result = dict(sorted(candidates.items(), key=lambda x: x[1]))
+
+  top10_keys = list(result.keys())[:10]  # desc
+  return result, top10_keys
+
+def hashtag_values(f1, f2, f3, f4, pitch): # remove sound argument
+  pickle_path = get_project_file_path(["value.pickle"])  # change 'value.pickle' -> project path
+
+  ############### ORIGINAL CODE ################
+  with open(pickle_path, "rb") as fr:  # pickle_path <- changed
+    value = pickle.load(fr)
+
+  files = value.keys()
+  distance = {}
+
+  for filename in files:
+    distance[filename] = abs(pitch - value[filename]['pitch']) + abs(f1 - value[filename]['f1']) + abs(f2 - value[filename]['f2']) + abs(f3 - value[filename]['f3']) + abs(f4 - value[filename]['f4'])
+
+  result = dict(sorted(distance.items(), key=lambda x: x[1]))
+
+  ###############################################
+
+  top10_keys = list(result.keys())[:10]  # desc
+  print(f'result: {result}')
+  print(f'top10_keys: {top10_keys}')
+  return result, top10_keys  # change return

@@ -110,3 +110,33 @@ def switch_child_sound(sound):
   elif gender == "male":
     switched_sound = call(sound, "Change gender", 60, 500, 1.6, 350, 1, 1)
   return switched_sound
+
+def reflection(sound, reflect):
+  pitch_factor = reflect
+  formant_factor = reflect
+  duration = sound.get_total_duration()
+  pitch_range_factor = 1
+  duration_factor = reflect
+  f0min, f0max = pitch_bounds(sound)
+  pitch = sound.to_pitch()
+  median_pitch = call(pitch, "Get quantile", 0, duration, 0.5, "Hertz")
+
+  new_pitch_median = pitch_factor * median_pitch
+
+  number_of_channels = call(sound, 'Get number of channels')
+  if number_of_channels == 2:
+    sound = call(sound, 'Convert to mono')
+
+  manipulated_sound = call(
+      sound,
+      "Change gender",
+      f0min,
+      f0max,
+      formant_factor,
+      new_pitch_median,
+      pitch_range_factor,
+      duration_factor,
+  )
+
+  manipulated_sound.scale_intensity(70)
+  return manipulated_sound          

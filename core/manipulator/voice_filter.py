@@ -333,3 +333,43 @@ def calculateFactors(data):
         float(data['f4Value']) / float(data['originalF4Value'])
         ) / DIVIDER_FACTOR
     return pitch_factor, formant_factor
+
+def both(sound, target_pitch, target_f1, target_f2, target_f3, target_f4, target_duration, reflect):
+  original_pitch = measure_pitch(sound)
+  original_f1, original_f2, original_f3, original_f4 = measure_formant(sound)
+  original_duration = original_sound.get_total_duration()
+
+  new_f1 = (target_f1 - original_f1) * reflect + original_f1
+  new_f2 = (target_f2 - original_f2) * reflect + original_f2
+  new_f3 = (target_f3 - original_f3) * reflect + original_f3
+  new_f4 = (target_f4 - original_f4) * reflect + original_f4
+  new_pitch = (target_pitch - original_pitch) * reflect + original_pitch
+  new_duration = (target_duration - original_duration) * reflect + original_duration
+
+  pitch_factor = new_pitch / original_pitch
+  formant_factor = (new_f1 / original_f1 + new_f2 / original_f2 + new_f3 / original_f3 + new_f4 / original_f4) / 4
+  pitch_range_factor = 1
+  duration_factor = new_duration / original_duration
+  f0min, f0max = pitch_bounds(sound)
+  pitch = sound.to_pitch()
+  median_pitch = call(pitch, "Get quantile", 0, original_duration, 0.5, "Hertz")
+
+  new_pitch_median = pitch_factor * median_pitch
+
+  number_of_channels = call(sound, 'Get number of channels')
+  if number_of_channels == 2:
+    sound = call(sound, 'Convert to mono')
+
+  manipulated_sound = call(
+      sound,
+      "Change gender",
+      f0min,
+      f0max,
+      formant_factor,
+      new_pitch_median,
+      pitch_range_factor,
+      duration_factor,
+  )
+
+  manipulated_sound.scale_intensity(70)
+  return manipulated_sound          

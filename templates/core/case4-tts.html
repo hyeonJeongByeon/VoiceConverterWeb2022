@@ -1,0 +1,362 @@
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+  <style>
+    body
+    {
+      margin: 0 auto;
+      width: 700px;
+    }
+    </style>
+<head>
+<title>Case 4. Voice Converter</title>
+<link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
+
+<meta charset="utf-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--[if IE]>
+<style type="text/css" media="screen">
+@import "ie.css";
+</style>
+<![endif]-->
+</head>
+<body>
+<div id="topLine">
+  <div id="header">
+    <h1><span>목소리</span>변환<span>시스템</span></h1>
+  </div>
+</div>
+<div id="outerwarrper">
+  <div id="wrapper">
+    <div id="content">
+      <h2>텍스트-음성 변환</h2>
+      <div style="box-sizing: border-box; width: 100%; padding: 16px 48px;">
+        <textarea id="text" name="text" rows="6" style="box-sizing: border-box; width: 100%; padding: 8px;"></textarea>
+      </div>
+
+      <form>
+        <button type="button" id="tts-upload-btn"> 음성 재생하기 </button>
+    </form>
+    
+      <div id="tts-voice-container" style="display: flex; justify-content: center;">
+      </div>
+
+      <h2> 목소리 속성 조절하기 </h2>
+      <h3></h3>
+      <div class="subbtn-container">
+        <button type="button" id="switch-gender-btn"> 성별 반전 </button>
+        <button type="button" id="switch-child-btn"> 아이 목소리 버전 </button>
+      </div>
+
+      <div id="slider_div">
+        <form >
+            <div class="adjust-voice">
+                <div class="adjust-voice-row">
+                    <div class="tooltip" >Pitch
+                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <div class="range-bar">
+                        <input name="pitch" type="range" class="form-range" id="pitch" min="0" max="1000">
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                </div>
+                <div class="adjust-voice-row">
+                    <div class="tooltip">f1
+                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <div class="range-bar">
+                        <input name="f1" type="range" class="form-range" id="f1" min="0" max="1000">
+                    </div> 
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                </div>
+                <div class="adjust-voice-row">
+                    <div class="tooltip">f2
+                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <div class="range-bar">
+                        <input name="f2" type="range" class="form-range" id="f2" min="1000" max="2000">
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                </div>
+                <div class="adjust-voice-row">
+                    <div class="tooltip">f3
+                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <div class="range-bar">
+                        <input name="f3" type="range" class="form-range" id="f3" min="2000" max="3000">
+                    </div>
+                    <a id="play-pause-button" class="fa fa-play"></a>
+                </div>
+                <div class="adjust-voice-row">
+                  <div class="tooltip">f4
+                      <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                  </div>
+                  <a id="play-pause-button" class="fa fa-play"></a>
+                  <div class="range-bar">
+                      <input name="f4" type="range" class="form-range" id="f4" min="3000" max="4000">
+                  </div>
+                  <a id="play-pause-button" class="fa fa-play"></a>
+              </div>
+            </div>
+
+            <div id="">
+
+            </div>
+            <button type="button" id="reset-btn" class="half-btn"> Reset </button>         
+            <button type="button" id="submit-btn" class="half-btn"> Submit </button>
+          </form>
+          <script src="https://use.fontawesome.com/66a8bce253.js"></script>
+
+
+
+
+      </div>
+        <h2> 변환된 음성 </h2>
+        <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
+        </div>
+
+        <script type="text/javascript">
+          var pitchInput = document.getElementById('pitch');
+          var f1Input = document.getElementById('f1');
+          var f2Input = document.getElementById('f2');
+          var f3Input = document.getElementById('f3');
+          var f4Input = document.getElementById('f4');
+
+          var manipulatedVoiceContainer = document.getElementById('manipulated-voice-container')
+          var textInput = document.getElementById('text');
+
+          function insertResultVoice(params) {
+            const {manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value} = params;
+            // Insert sound 
+            manipulatedVoiceContainer.innerHTML = `
+            <div style="margin: 10px 0; width: 80%;">
+              <audio id="player" controls src=${manipulated_sound_url} style="width: 100%;">
+              </audio>
+              <div class="audio-result-container">
+                <div>
+                  <span class="bold">pitch: </span> <span>${parseInt(pitchValue)}</span>
+                </div>
+                <div>
+                  <span class="bold">f1: </span> <span>${parseInt(f1Value)}</span>
+                </div>
+                <div>
+                  <span class="bold">f2: </span> <span>${parseInt(f2Value)}</span>
+                </div>
+                <div>
+                  <span class="bold">f3: </span> <span>${parseInt(f3Value)}</span>
+                </div>
+                <div>
+                  <span class="bold">f4: </span> <span>${parseInt(f4Value)}</span>
+                </div>
+              </div>
+            </div>
+            ${manipulatedVoiceContainer.innerHTML}
+          `
+          }
+
+          var submit_btn = document.getElementById('submit-btn');
+          submit_btn.addEventListener('click', async function() {
+
+            var pitchValue = pitchInput.value;
+            console.log(pitchValue);
+            var f1Value = f1Input.value;
+            console.log(f1Value);
+            var f2Value = f2Input.value;
+            console.log(f2Value);
+            var f3Value = f3Input.value;
+            console.log(f3Value);
+            var f4Value = f4Input.value;
+            console.log(f4Value);
+
+            var textValue = textInput.value;
+
+            // Send file to server
+            let formData = new FormData();           
+            formData.append("textForTTS", textValue);
+            formData.append("pitchValue", pitchValue);
+            formData.append("f1Value", f1Value);
+            formData.append("f2Value", f2Value);
+            formData.append("f3Value", f3Value);
+            formData.append("f4Value", f4Value);
+            formData.append("originalPitchValue", localStorage.getItem('original_pitch'));
+            formData.append("originalF1Value", localStorage.getItem('original_f1'));
+            formData.append("originalF2Value", localStorage.getItem('original_f2'));
+            formData.append("originalF3Value", localStorage.getItem('original_f3'));
+            formData.append("originalF4Value", localStorage.getItem('original_f4'));
+
+
+            response = await fetch('{% url "manipulate_audio" %}', {
+              method: "POST", 
+              body: formData
+            });
+
+            var { manipulated_sound_url } = await response.json()
+            
+            // Insert sound 
+            insertResultVoice({
+              manipulated_sound_url,
+              pitchValue,
+              f1Value,
+              f2Value,
+              f3Value,
+              f4Value,
+            })
+          })
+
+
+          var resetBtn = document.getElementById('reset-btn')
+          resetBtn.addEventListener('click', function() {
+            pitchInput.value = localStorage.getItem('original_pitch');
+            f1Input.value = localStorage.getItem('original_f1');
+            f2Input.value = localStorage.getItem('original_f2');
+            f3Input.value = localStorage.getItem('original_f3');
+            f4Input.value = localStorage.getItem('original_f4');
+          })
+        </script>
+
+      
+
+      <script>
+        var ttsVoiceContainer = document.getElementById('tts-voice-container')
+
+        var tts_upload_btn = document.getElementById('tts-upload-btn');
+        tts_upload_btn.addEventListener('click', async function() {
+
+         var textValue = textInput.value;
+
+         // validate text
+         if(!textValue) {
+            alert('텍스트를 입력해야 합니다');
+            return 
+         }
+
+          // Send file to server
+          let formData = new FormData();           
+          formData.append("textForTTS", textValue);
+
+
+          response = await fetch('{% url "convert_text_to_audio" %}?need_features=true', {
+            method: "POST", 
+            body: formData
+          });
+
+          var { file_url, pitch, f1, f2, f3, f4 } = await response.json()
+
+          // Insert sound 
+          ttsVoiceContainer.innerHTML = `
+          <div style="margin: 10px 0;">
+              <audio id="player" controls src=${file_url}>  
+            </div>
+          `
+
+          // Initialize bar input
+          pitchInput.value = pitch;
+          f1Input.value = f1;
+          f2Input.value = f2;
+          f3Input.value = f3;
+          f4Input.value = f4;
+
+          localStorage.setItem('original_pitch', pitch);
+          localStorage.setItem('original_f1', f1);
+          localStorage.setItem('original_f2', f2);
+          localStorage.setItem('original_f3', f3);
+          localStorage.setItem('original_f4', f4);
+        })
+      </script>
+ 
+
+      <script>
+        var switchGenderBtn = document.getElementById('switch-gender-btn');
+
+        switchGenderBtn.addEventListener('click', async function() {
+          var textValue = textInput.value;
+
+          // validate text
+          if(!textValue) {
+             alert('텍스트를 입력해야 합니다');
+             return 
+          }
+ 
+           // Send file to server
+           let formData = new FormData();           
+           formData.append("textForTTS", textValue);
+
+          response = await fetch('{% url "switch_gender" %}', {
+            method: "POST", 
+            body: formData
+          });
+
+          var { manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value } = await response.json()     
+          
+          // Change bar input
+          pitchInput.value = pitchValue;
+          f1Input.value = f1Value;
+          f2Input.value = f2Value;
+          f3Input.value = f3Value;
+          f4Input.value = f4Value;
+
+          // Insert result voice
+          insertResultVoice({
+            manipulated_sound_url,
+            pitchValue,
+            f1Value,
+            f2Value,
+            f3Value,
+            f4Value,
+          })
+        })
+      </script>
+
+      <script>
+        var switchChildBtn = document.getElementById('switch-child-btn');
+
+        switchChildBtn.addEventListener('click', async function() {
+          var textValue = textInput.value;
+
+         // validate text
+         if(!textValue) {
+            alert('텍스트를 입력해야 합니다');
+            return 
+         }
+
+          // Send file to server
+          let formData = new FormData();           
+          formData.append("textForTTS", textValue);
+
+          response = await fetch('{% url "switch_child" %}', {
+            method: "POST", 
+            body: formData
+          });
+
+          var { manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value } = await response.json()     
+          
+          // Change bar input
+          pitchInput.value = pitchValue;
+          f1Input.value = f1Value;
+          f2Input.value = f2Value;
+          f3Input.value = f3Value;
+          f4Input.value = f4Value;
+
+          // Insert result voice
+          insertResultVoice({
+            manipulated_sound_url,
+            pitchValue,
+            f1Value,
+            f2Value,
+            f3Value,
+            f4Value,
+          })
+        })
+      </script>
+      
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

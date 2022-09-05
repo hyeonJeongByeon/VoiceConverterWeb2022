@@ -25,25 +25,27 @@
 <div id="topLine">
   <div id="header">
     <h1><span>목소리</span>변환<span>시스템</span></h1>
+    <h2>다음의 목소리를 듣고 아래의 슬라이더를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
-      <h2>본인의 목소리를 업로드 해주세요</h2>
+      <h2>정답 음성</h2>
+      <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합하여 제작된 음성입니다. 반영도 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
       <div id="original_voice">
-        <input type="file" accept="audio/*" capture id="upload-your-voice" />
-        <audio id="upload-your-voice-player" controls>
+        <input type="file" accept="audio/*" capture id="answer-voice" />
+        <audio id="answer-voice-player" controls>
           <script>
-            const yourVoiceUploader = document.getElementById('upload-your-voice');
-            const yourVoicePlayer = document.getElementById('upload-your-voice-player');
+            const answerVoiceUploader = document.getElementById('answer-voice');
+            const answerVoicePlayer = document.getElementById('answer-voice-player');
         
-            yourVoiceUploader.addEventListener('change', async function (e) {
+            answerVoiceUploader.addEventListener('change', async function (e) {
               const file = e.target.files[0];
               const url = URL.createObjectURL(file);
 
               // Show audio
-              yourVoicePlayer.src = url;
+              answerVoicePlayer.src = url;
  
             });
           </script>
@@ -171,13 +173,35 @@
         </div>
 
       -->
-      <h2>타겟 화자의 목소리를 업로드해주세요</h2>
+      <h2>원본 목소리</h2>
+      <h3>원본 음성을 들은 후 아래의 반영도 슬라이더를 조정하여 정답 음성에 가까운 목소리를 만들어주세요.</h3>
       <div id="original_voice">
-        <input type="file" accept="audio/*" capture id="upload-target-voice" />
-        <audio id="upload-target-voice-player" controls>
+        <input type="file" accept="audio/*" capture id="original-voice" />
+        <audio id="original-voice-player" controls>
           <script>
-            const targetVoiceUploader = document.getElementById('upload-target-voice');
-            const targetVoicePlayer = document.getElementById('upload-target-voice-player');
+            const originalVoiceUploader = document.getElementById('original-voice');
+            const originalVoicePlayer = document.getElementById('original-voice-player');
+        
+            originalVoiceUploader.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+              
+              // Show audio
+              originalVoicePlayer.src = url;
+ 
+            });
+          </script>
+        </audio>
+      </div>
+
+      <h2>타겟 목소리 --(대체할만한 용어...)</h2>
+      <h3>이용된 목소리..?</h3>
+      <div id="original_voice">
+        <input type="file" accept="audio/*" capture id="target-voice" />
+        <audio id="target-voice-player" controls>
+          <script>
+            const targetVoiceUploader = document.getElementById('target-voice');
+            const targetVoicePlayer = document.getElementById('target-voice-player');
         
             targetVoiceUploader.addEventListener('change', async function (e) {
               const file = e.target.files[0];
@@ -194,7 +218,7 @@
       <form>
         <div class="adjust-voice-row">
             <div class="tooltip">반영도
-                <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다.</span>
+                <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다. 슬라이더를 오른쪽으로 움직일수록 타겟(?) 음성에 가까워집니다.</span>
             </div>
             <div class="range-bar">
                 <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05">
@@ -217,21 +241,13 @@
 
             var submit_btn = document.getElementById('submit-btn');
             submit_btn.addEventListener('click', async function() {
-             var yourAudio = yourVoiceUploader.files[0];
-             var targetAudio = targetVoiceUploader.files[0];
-
-             // validate audio
-             if(!yourAudio || !targetAudio) {
-                alert('원본 음성과 타겟 음성을 선택해야 합니다');
-                return
-             }
-
-
+              var originalAudio = originalVoiceUploader.files[0];
+              var targetAudio = targetVoiceUploader.files[0];
               var reflectValue = reflectInput.value;
     
               // Send file to server
               let formData = new FormData();           
-              formData.append("yourAudio", yourAudio);
+              formData.append("yourAudio", originalAudio);
               formData.append("targetAudio", targetAudio);
               formData.append("reflectValue", reflectValue);
   
