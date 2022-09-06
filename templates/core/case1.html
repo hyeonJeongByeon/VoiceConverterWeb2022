@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Case 1. Voice Converter</title>
+<title>Case 1</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -35,7 +35,9 @@
       <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합하여 제작된 음성입니다. 반영도 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="answer-voice" />
-        <audio id="answer-voice-player" controls>
+        <audio id="answer-voice-player" controls src="{{original_audio_url}}">
+        </audio>
+          <!---
           <script>
             const answerVoiceUploader = document.getElementById('answer-voice');
             const answerVoicePlayer = document.getElementById('answer-voice-player');
@@ -49,7 +51,7 @@
  
             });
           </script>
-        </audio>
+        -->
       </div>
 
       <!--
@@ -194,8 +196,8 @@
         </audio>
       </div>
 
-      <h2>타겟 목소리 --(대체할만한 용어...)</h2>
-      <h3>이용된 목소리..?</h3>
+      <h2>타겟 목소리</h2>
+      <h3>정답음성을 제작하는데에 사용된 타겟 목소리입니다.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="target-voice" />
         <audio id="target-voice-player" controls>
@@ -218,10 +220,10 @@
       <form>
         <div class="adjust-voice-row">
             <div class="tooltip">반영도
-                <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다. 슬라이더를 오른쪽으로 움직일수록 타겟(?) 음성에 가까워집니다.</span>
+                <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다. 슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
             </div>
             <div class="range-bar">
-                <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05">
+                <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05" value="0">
             </div>
         </div>
       <button type="button" id="submit-btn"> 제출 </button>
@@ -265,10 +267,10 @@
                 </audio>
                 <div class="audio-result-container">
                   <div>
-                    <span class="bold">your voice: </span> <span>${parseInt((1 - reflectValue) * 100)}%</span>
+                    <span class="bold">원본 음성: </span> <span>${parseInt(reflectValue * 100)}%</span>
                   </div>
                   <div>
-                    <span class="bold">target voice: </span> <span>${parseInt(reflectValue * 100)}%</span>
+                    <span class="bold">타겟 음성: </span> <span>${parseInt((1 - reflectValue) * 100)}%</span>
                   </div>
                 </div>
               </div>

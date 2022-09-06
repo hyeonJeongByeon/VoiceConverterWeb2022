@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Case 2. Voice Converter</title>
+<title>Case 2</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -30,8 +30,31 @@
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
-      <h2>자신의 목소리를 업로드해주세요</h2>
-      <h3></h3>
+      <h2>정답 음성</h2>
+      <h3>아래의 정답 음성은 원본 음성을 변조하여 제작된 음성입니다. 아래의 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
+      <div id="original_voice">
+        <input type="file" accept="audio/*" capture id="answer-voice" />
+        <audio id="answer-voice-player" controls src="{{original_audio_url}}">
+        </audio>
+          <!---
+          <script>
+            const answerVoiceUploader = document.getElementById('answer-voice');
+            const answerVoicePlayer = document.getElementById('answer-voice-player');
+        
+            answerVoiceUploader.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+
+              // Show audio
+              answerVoicePlayer.src = url;
+ 
+            });
+          </script>
+        -->
+      </div>
+
+      <h2>실험에 사용될 원본 음성입니다.</h2>
+      <h3>변조하기 전의 목소리입니다. 이 목소리를 기준으로 음성 변조를 해주세요.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="recorder" />
         <audio id="player" controls>
@@ -191,28 +214,30 @@
         -->
       
       <h2> 목소리 속성 조절 </h2>
-      <h3></h3>
+      <h3>아래의 슬라이더는 원본 음성에 맞게 초기화되어있습니다. 슬라이더를 좌우로 움직여 정답 음성에 가까워지도록 조절해주세요.</h3>
+      <!--
       <div class="subbtn-container">
         <button type="button" id="switch-gender-btn"> 성별 반전 </button>
         <button type="button" id="switch-child-btn"> 아이목소리 버전 </button>
       </div>
+    -->
 
       <div id="slider_div">
         <form >
             <div class="adjust-voice">
                 <div class="adjust-voice-row">
                     <div class="tooltip" >음의 높이
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">음의 높고 낮음을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
-                        <input name="pitch" type="range" class="form-range" id="pitch" min="0" max="1000">
+                        <input name="pitch" type="range" class="form-range" id="pitch" min="100" max="700">
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f1
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">가장 낮은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
@@ -222,7 +247,7 @@
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f2
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">두번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
@@ -232,7 +257,7 @@
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f3
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">세번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
@@ -242,7 +267,7 @@
                 </div>
                 <div class="adjust-voice-row">
                   <div class="tooltip">f4
-                      <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                      <span class="tooltiptext">가장 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                   </div>
                   <a id="play-pause-button" class="fa fa-play"></a>
                   <div class="range-bar">
@@ -251,8 +276,8 @@
                   <a id="play-pause-button" class="fa fa-play"></a>
               </div>
               <div class="adjust-voice-row">
-                <div class="tooltip">duration
-                    <span class="tooltiptext">....</span>
+                <div class="tooltip">늘어짐
+                    <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
                 </div>
                 <a id="play-pause-button" class="fa fa-play"></a>
                 <div class="range-bar">
@@ -266,8 +291,8 @@
 
             </div>
 
-          <button type="button" id="reset-btn" class="half-btn"> Reset </button>
-          <button type="button" id="submit-btn" class="half-btn"> Submit </button>
+          <button type="button" id="reset-btn" class="half-btn"> 초기화 </button>
+          <button type="button" id="submit-btn" class="half-btn"> 제출 </button>
 
           </form>
           <script src="https://use.fontawesome.com/66a8bce253.js"></script>

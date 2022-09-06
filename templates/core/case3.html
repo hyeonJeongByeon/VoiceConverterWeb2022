@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Case 2. Voice Converter</title>
+<title>Case 3</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -31,7 +31,7 @@
   <div id="wrapper">
     <div id="content">
       <h2>정답 음성</h2>
-      <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합하여 제작된 음성입니다. 반영도 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
+      <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합한 후, 속성값을 조절하여 제작된 음성입니다. 반영도 슬라이더를 먼저 움직여 반영도를 정하고, 속성값 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="answer-voice" />
         <audio id="answer-voice-player" controls>
@@ -52,7 +52,7 @@
       </div>
 
       <h2>원본 목소리</h2>
-      <h3>원본 음성을 들은 후 아래의 반영도 슬라이더를 조정하여 정답 음성에 가까운 목소리를 만들어주세요.</h3>
+      <h3></h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="original-voice" />
         <audio id="original-voice-player" controls>
@@ -250,17 +250,17 @@
             <div class="adjust-voice">
                 <div class="adjust-voice-row">
                     <div class="tooltip" >음의 높이
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">음의 높고 낮음을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
-                        <input name="pitch" type="range" class="form-range" id="pitch" min="0" max="1000">
+                        <input name="pitch" type="range" class="form-range" id="pitch" min="100" max="700">
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f1
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">가장 낮은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
@@ -270,7 +270,7 @@
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f2
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">두번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
@@ -280,7 +280,7 @@
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f3
-                        <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                        <span class="tooltiptext">세번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <a id="play-pause-button" class="fa fa-play"></a>
                     <div class="range-bar">
@@ -290,7 +290,7 @@
                 </div>
                 <div class="adjust-voice-row">
                   <div class="tooltip">f4
-                      <span class="tooltiptext">the degree of highness or lowness of a tone</span>
+                      <span class="tooltiptext">가장 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                   </div>
                   <a id="play-pause-button" class="fa fa-play"></a>
                   <div class="range-bar">
@@ -299,8 +299,8 @@
                   <a id="play-pause-button" class="fa fa-play"></a>
               </div>
               <div class="adjust-voice-row">
-                <div class="tooltip">duration
-                    <span class="tooltiptext">....</span>
+                <div class="tooltip">늘어짐
+                    <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
                 </div>
                 <a id="play-pause-button" class="fa fa-play"></a>
                 <div class="range-bar">
