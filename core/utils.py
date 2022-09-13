@@ -10,6 +10,7 @@ from gtts import gTTS
 from datetime import datetime
 from fastdtw import fastdtw
 import pickle
+import pandas as pd
 
 
 def get_project_file_path(postfixes: list):
@@ -17,7 +18,7 @@ def get_project_file_path(postfixes: list):
     return os.path.join(BASE_DIR, *postfixes)
 
 def get_s3_file_url(filename):
-    return f'{S3_URL}recordings/{filename}.mp3'
+    return f'{S3_URL}recordings/{filename}'
 
 def save_uploaded_file(file, name=None):
     fs = FileSystemStorage()
@@ -125,3 +126,65 @@ def hashtag_values(f1, f2, f3, f4, pitch): # remove sound argument
   print(f'result: {result}')
   print(f'top10_keys: {top10_keys}')
   return result, top10_keys  # change return
+
+
+def get_distance_top10():
+  pickle_path = get_project_file_path(["distance.pickle"])
+
+  with open(pickle_path, "rb") as fr:  # pickle_path <- changed
+    distance = pickle.load(fr)
+
+  result = dict(sorted(distance.items(), key=lambda x: x[1]))
+
+  top10_keys = list(result.keys())[1:1+10]  # desc (remove original audio)
+
+  return result, top10_keys  # change return
+
+
+def get_hashtag_top(hashtags: list):
+  csv_path = get_project_file_path(["labelled_data.csv"])
+  df = pd.read_csv(csv_path)
+
+  threshold = 3
+  filter = df[hashtags[0]] >= threshold
+
+  for hashtag in hashtags[1:]:
+    new_filter = df[hashtag] >= threshold
+    filter = filter & new_filter
+
+  top_df = df[filter]
+  top_filenames = top_df['filename']
+
+  return list(top_filenames)
+
+
+def get_distance_top10_from_filenames(filenames):
+  pickle_path = get_project_file_path(["distance.pickle"])
+
+  with open(pickle_path, "rb") as fr:  # pickle_path <- changed
+    distance = pickle.load(fr)
+
+  print(distance)
+  filtered_distance = {k: v for k, v in distance.items() if k in filenames}
+
+  result = dict(sorted(filtered_distance.items(), key=lambda x: x[1]))
+
+  top10_keys = list(result.keys())[1:1+10]  # desc (remove original audio)
+
+  return result, top10_keys  # change return
+
+
+def get_hashtag_top_from_tag(hashtags: list):
+  csv_path = get_project_file_path(["voice_tagging.csv"])
+  df = pd.read_csv(csv_path)
+
+  match_counter = df['Hashtag1'].isin(hashtags).astype(int)
+
+  for column_name in ['Hashtag2', 'Hashtag3', 'Hashtag4', 'Hashtag5', 'Hashtag6']:
+    new_match_counter = df[column_name].isin(hashtags).astype(int)
+    match_counter = match_counter + new_match_counter
+
+  top_df = df[match_counter == len(hashtags)]
+  top_filenames = top_df['Speaker ID']
+
+  return list(top_filenames)

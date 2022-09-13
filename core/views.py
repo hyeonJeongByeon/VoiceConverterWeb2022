@@ -10,6 +10,8 @@ from voice_django.settings.base import S3_URL
 import requests
 
 
+
+
 def case1(request):
     return render(request, 'core/case1.html')
 
@@ -27,17 +29,9 @@ def case5(request):
     original_file_url = '/' + os.path.join(*path_elements)
     if request.method == 'POST':
         # top 10 -> find -> function
-        # Set audio related variables
-        filepath = get_project_file_path(path_elements)
-
-        sound = get_sound(filepath)
-
-        # Calculate formant, pitch
-        formant = measure_formant(sound)
-        pitch = measure_pitch(sound)
 
         # Get top 10 list (url)
-        result, top10_keys = hashtag_values(formant["F1 Mean"], formant["F2 Mean"],formant["F3 Mean"],formant["F4 Mean"],pitch["Mean Pitch (F0)"])
+        result, top10_keys = get_distance_top10()
 
         top10_desc = map(lambda key: {'url': get_s3_file_url(key.replace('.wav', '')), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
 
@@ -50,28 +44,46 @@ def case5(request):
         return render(request, 'core/case5.html', context=context)
 
 def case6(request):
+    feature_info = {
+        "breathiness": {
+            "label": "숨소리가 많다", 
+        },
+            "hoarseness": {
+            "label": "거칠다", 
+        },
+            "pitch": {
+            "label": "높다", 
+        },
+            "precise": {
+            "label": "발음이 명확하다", 
+        },
+            "speed": {
+            "label": "빠르다", 
+        },
+            "variation": {
+            "label": "음 높낮이 차이가 크다", 
+        },
+            "volume": {
+            "label": "음량이 크다", 
+        }
+    }
+
     path_elements = ['media', 'original.mp3']
     original_file_url = '/' + os.path.join(*path_elements)
 
     if request.method == 'POST':
         # top 10 -> find -> function
-        # Set audio related variables
-        filepath = get_project_file_path(path_elements)
-
-        sound = get_sound(filepath)
-
-        #import io
-        #r = requests.get(S3_URL + 'original.mp3')
-        #original_io = io.BytesIO(r.content)
-        #filename, filepath, uploaded_file_url = save_uploaded_file(original_io, 'original.mp3')
-
         # Get top 10 list (url)
-        result, top10_keys = hashtag_feature(sound, request.POST['feature'])
+        features = request.POST.getlist('feature')
+        top_filenames = get_hashtag_top(features)
+
+        result, top10_keys = get_distance_top10_from_filenames(top_filenames)
 
         top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
 
+        feature_labels = map(lambda feature: feature_info[feature]['label'], features)
         # Make context
-        context = {'top10_desc': top10_desc, 'original_audio_url': original_file_url}
+        context = {'top10_desc': top10_desc, 'original_audio_url': original_file_url, 'feature_labels': feature_labels}
 
         return render(request, 'core/case6.html', context=context)
     else:
@@ -79,81 +91,46 @@ def case6(request):
         return render(request, 'core/case6.html', context=context)
 
 def case7(request):
-    answer = {
-            'audio_url':     get_s3_file_url('english288'), 
-            'hashtag': [
-                '낮다', '느리다', '모노톤이다', '명확하다', '발음이 정확하다'
-            ]
+    feature_info = {
+        "느리다": {
+            "label": "느리다", 
+        },
+            "낮다": {
+            "label": "낮다", 
+        },
+            "모노톤이다": {
+            "label": "모노톤이다", 
+        },
+            "명확하다": {
+            "label": "명확하다", 
+        },
+            "발음이 정확하다": {
+            "label": "발음이 정확하다", 
         }
-    compare = [
-        {
-            'label': 'Hashtag 3개 일치',
-            'data': [
-                {
-                    'audio_url':     get_s3_file_url('english380'), 
-                    'hashtag': [
-                        '낮다', '느리다', '모노톤이다', '딱딱하다', '강세가 있다'
-                    ]
-                },
-                {
-                    'audio_url':     get_s3_file_url('english411'), 
-                    'hashtag': [
-                        '낮다', '느리다', '모노톤이다', '숨소리', '코맹맹이 소리', '점점 느려진다'
-                    ]
-                },
-            ],
-        },
-        {
-            'label': 'Hashtag 2개 일치',
-            'data': [
-                {
-                    'audio_url':     get_s3_file_url('english477'), 
-                    'hashtag': [
-                        '낮다', '느리다', '또박또박 말한다', '꽉 찬 목소리', '강세가 있다'
-                    ]
-                },
-                {
-                    'audio_url':     get_s3_file_url('english562'), 
-                    'hashtag': [
-                        '낮다', '느리다', '나이가 많다', '사투리가 있다'
-                    ]
-                },
-            ]
-        },
-        {
-            'label': 'Hashtag 1개 일치',
-            'data': [
-                {
-                    'audio_url':     get_s3_file_url('english192'), 
-                    'hashtag': [
-                        '느리다', '높다', '음 높낮이가 있다', '또박또박 말한다'
-                    ]
-                },
-                {
-                    'audio_url':     get_s3_file_url('english506'), 
-                    'hashtag': [
-                        '느리다', '숨소리가 들린다', '강세가 있다', '딱딱하다', '소리가 울린다'
-                    ]
-                },
-                {
-                    'audio_url':     get_s3_file_url('english531'), 
-                    'hashtag': [
-                        '느리다', '높다', '나이가 많다', '목소리가 떨린다'
-                    ]
-                },
-                {
-                    'audio_url':     get_s3_file_url('english534'), 
-                    'hashtag': [
-                        '느리다', '목소리가 떨린다', '조심스럽다', '또박또박 말한다', '나이가 많다'
-                    ]
-                },
-            ]
-        },
-    ]
+    }
 
+    path_elements = ['media', 'original.mp3']
+    original_file_url = '/' + os.path.join(*path_elements)
 
-    context={'answer': answer, 'compare': compare}
-    return render(request, 'core/case7.html', context=context)
+    if request.method == 'POST':
+        # top 10 -> find -> function
+        # Get top 10 list (url)
+        features = request.POST.getlist('feature')
+
+        top_filenames = get_hashtag_top_from_tag(features)
+
+        result, top10_keys = get_distance_top10_from_filenames(top_filenames)
+
+        top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
+
+        feature_labels = map(lambda feature: feature_info[feature]['label'], features)
+        # Make context
+        context = {'top10_desc': top10_desc, 'original_audio_url': original_file_url, 'feature_labels': feature_labels}
+
+        return render(request, 'core/case7.html', context=context)
+    else:
+        context = {'original_audio_url': original_file_url}
+        return render(request, 'core/case7.html', context=context)
 
 # API
 @csrf_exempt

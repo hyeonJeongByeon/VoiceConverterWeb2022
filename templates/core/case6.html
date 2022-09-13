@@ -16,7 +16,7 @@
     }
     </style>
 <head>
-<title>Case 1. Voice Converter</title>
+<title>Case 6</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -44,25 +44,55 @@
         </audio>
         <form method='POST'>
             {% csrf_token %}
-            <label for="feature">속성 선택</label>
+              <label for="breathiness">
+                <input type="checkbox" value="breathiness" id="breathiness" name="feature">
+                숨소리가 많다
+              </label>
+              <label for="hoarseness">
+                <input type="checkbox" value="hoarseness" id="hoarseness" name="feature">
+                거칠다
+              </label>
+              <label for="pitch">
+                <input type="checkbox" value="pitch" id="pitch" name="feature">
+                높다
+              </label>
+              
+              <label for="precise">
+                <input type="checkbox" value="precise" id="precise" name="feature">
+                발음이 명확하다
+              </label>
+              
+              <label for="speed">
+                <input type="checkbox" value="speed" id="speed" name="feature">
+                빠르다
+              </label>
+              
+              <label for="variation">
+                <input type="checkbox" value="variation" id="variation" name="feature">
+                음 높낮이 차이가 크다
+              </label>
+              
+              <label for="volume">
+                <input type="checkbox" value="volume" id="volume" name="feature">
+                음량이 크다
+              </label>
 
-            <select name="feature" id="feature">
-                <option value="breathiness">숨소리가 많다</option>
-                <option value="hoarseness">거칠다</option>
-                <option value="pitch">높다</option>
-                <option value="precise">발음이 명확하다</option>
-                <option value="speed">빠르다</option>
-                <option value="variation">음 높낮이가 크다</option>
-                <option value="volume">음량이 높다</option>
-            </select>
 
             <button type="submit">유사한 목소리 Top10</button>
         </form>
       </div>
 
-
+      {% if top10_desc %}
       <h2>정답 음성과 가장 비슷한 10개 음성</h2>
-      <h3>아래의 목소리는 정답과 가장 비슷한 10개의 음성 목록입니다. 음성 파일 아래쪽에는 목소리의 절대적인 수치값과 이를 바탕으로 정답 음성으로부터 얼마나 멀리 떨어져있는지를 나타내는 거리가 적혀있습니다. 정답과 가장 비슷한 음성을 찾아주세요.</h3>
+      <h3>아래의 목소리는 정답과 가장 비슷한 10개의 음성 목록입니다. </h3>
+      <h3>음성 파일 아래쪽에는 목소리의 절대적인 수치값과 이를 바탕으로 정답 음성으로부터 얼마나 멀리 떨어져있는지를 나타내는 거리가 적혀있습니다. </h3>
+      <h3>정답과 가장 비슷한 음성을 찾아주세요.</h3>
+
+      <div style="display: flex; justify-content: center;">
+        {% for label in feature_labels %}
+          <span>#{{label}} &nbsp</span>
+        {% endfor %}
+      </div>
       <div id="original_voice">
         {% for data in top10_desc %}
         <div style="margin: 10px 0; width: 80%;">
@@ -78,7 +108,7 @@
         {% endfor %}
       </div>
 
-     
+     {% endif %}
 
       
     </div>

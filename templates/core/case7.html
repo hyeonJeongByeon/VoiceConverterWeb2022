@@ -42,31 +42,62 @@
       <h2>정답 음성</h2>
       <h3>아래의 음성은 정답 음성입니다. 이 음성과 가장 닮은 목소리를 찾아주세요. </h3>
       <div id="original_voice">
-        <audio id="answer-voice-player" controls src="{{answer.audio_url}}">
+        <audio id="answer-voice-player" controls src="{{original_audio_url}}">
         </audio>
-        <div class="hashtag-container">
-            {% for hashtag in answer.hashtag %}
-                <span>#{{hashtag}}</span> 
-            {% endfor %}
-        </div>
+        <form method='POST'>
+          {% csrf_token %}
+            <label for="slow">
+              <input type="checkbox" value="느리다" id="slow" name="feature">
+              느리다
+            </label>
+            <label for="low">
+              <input type="checkbox" value="낮다" id="low" name="feature">
+              낮다
+            </label>
+            <label for="monotonous">
+              <input type="checkbox" value="모노톤이다" id="monotonous" name="feature">
+              모노톤이다
+            </label>
+            
+            <label for="clear">
+              <input type="checkbox" value="명확하다" id="clear" name="feature">
+              명확하다
+            </label>
+            
+            <label for="precise">
+              <input type="checkbox" value="발음이 정확하다" id="precise" name="feature">
+              발음이 정확하다
+            </label>
+          <button type="submit">유사한 목소리 Top10</button>
+      </form>
       </div>
 
-
+      {% if top10_desc %}
       <h2>해쉬태그 검색 결과</h2>
-      {% for section in compare %}
-      <h3>{{section.label}}</h3>
-        {% for data in section.data %}
-            <div id="original_voice">
-                <audio id="answer-voice-player" controls src="{{data.audio_url}}">
-                </audio>
-                <div class="hashtag-container">
-                    {% for hashtag in data.hashtag %}
-                        <span>#{{hashtag}}</span> 
-                    {% endfor %}
-                </div>
-            </div>
+      <h3>다음은 정답 음성의 해쉬태그를 기준으로 해쉬태그가 일치하는 갯수대로 목소리를 정렬한 결과입니다. 가장 비슷한 목소리를 선택해주세요.</h3>
+      <div style="display: flex; justify-content: center;">
+        {% for label in feature_labels %}
+          <span>#{{label}} &nbsp</span>
         {% endfor %}
-      {% endfor %}
+      </div>
+      <div id="original_voice">
+        {% for data in top10_desc %}
+        <div style="margin: 10px 0; width: 80%;">
+          <audio id="player" controls src="{{data.url}}" style="width: 100%;">
+          </audio>
+          <div class="audio-result-container">
+            <div>
+              <span class="bold">정답으로부터의 거리: </span> <span>{{data.euclidean}}</span>
+            </div>
+            
+          </div>
+        </div>
+        {% empty %}
+        <div style="display: flex; justify-content: center; font-size: 18px;">검색결과가 없습니다.</div>
+        {% endfor %}
+      </div>
+
+     {% endif %}
       
     </div>
   </div>
