@@ -33,7 +33,9 @@ def case5(request):
         # Get top 10 list (url)
         result, top10_keys = get_distance_top10()
 
-        top10_desc = map(lambda key: {'url': get_s3_file_url(key.replace('.wav', '')), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
+        #원본 top10_desc = map(lambda key: {'url': get_s3_file_url(key.replace('.wav', '')), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
+        top10_desc = map(lambda key: {'url': get_s3_file_url(key.replace('.wav', '')), 'euclidean': "{:.2f}".format(100 - result[key]*0.1)}, top10_keys)
+
 
         # Make context
         context = {'top10_desc': top10_desc, 'original_audio_url': original_file_url}
@@ -79,7 +81,9 @@ def case6(request):
 
         result, top10_keys = get_distance_top10_from_filenames(top_filenames)
 
-        top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
+        top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': ("{:.2f}".format(100 - result[key]*0.1))}, top10_keys)
+        #원본 top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': ("{:.2f}".format(result[key]))}, top10_keys)
+        #top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': 100 - float("{:.2f}".format(result[key]))*0.1 }, top10_keys)
 
         feature_labels = map(lambda feature: feature_info[feature]['label'], features)
         # Make context
@@ -121,7 +125,9 @@ def case7(request):
 
         result, top10_keys = get_distance_top10_from_filenames(top_filenames)
 
-        top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
+        #원본 top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': "{:.2f}".format(result[key]) }, top10_keys)
+        top10_desc = map(lambda key: {'url': get_s3_file_url(key), 'euclidean': "{:.2f}".format(100 - result[key]*0.1)}, top10_keys)
+
 
         feature_labels = map(lambda feature: feature_info[feature]['label'], features)
         # Make context

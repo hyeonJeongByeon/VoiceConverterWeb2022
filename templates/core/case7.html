@@ -68,14 +68,15 @@
               <input type="checkbox" value="발음이 정확하다" id="precise" name="feature">
               발음이 정확하다
             </label>
-          <button type="submit">유사한 목소리 Top10</button>
+          <button type="submit">검색</button>
       </form>
       </div>
 
       {% if top10_desc %}
       <h2>해쉬태그 검색 결과</h2>
-      <h3>다음은 정답 음성의 해쉬태그를 기준으로 해쉬태그가 일치하는 갯수대로 목소리를 정렬한 결과입니다. 가장 비슷한 목소리를 선택해주세요.</h3>
-      <div style="display: flex; justify-content: center;">
+      <h3>정답 음성을 듣고, 다음의 선택지 중에 정답 음성을 잘 나타내는 해쉬태그를 선택해주세요. 중복 선택이 가능합니다. 해쉬태그를 선택하여 검색한 결과와 유사도를 참고하여 가장 비슷한 목소리를 선택해주세요.</h3>
+      <div style="display: flex; justify-content: center; font-size: 16px; margin-top: 6px;">
+    
         {% for label in feature_labels %}
           <span>#{{label}} &nbsp</span>
         {% endfor %}
@@ -87,7 +88,7 @@
           </audio>
           <div class="audio-result-container">
             <div>
-              <span class="bold">정답으로부터의 거리: </span> <span>{{data.euclidean}}</span>
+              <span class="bold">유사도: </span> <span>{{data.euclidean}}</span>
             </div>
             
           </div>

@@ -14,6 +14,7 @@
       margin: 0 auto;
       width: 700px;
     }
+
     </style>
 <head>
 <title>Case 6</title>
@@ -85,12 +86,12 @@
       {% if top10_desc %}
       <h2>정답 음성과 가장 비슷한 10개 음성</h2>
       <h3>아래의 목소리는 정답과 가장 비슷한 10개의 음성 목록입니다. </h3>
-      <h3>음성 파일 아래쪽에는 목소리의 절대적인 수치값과 이를 바탕으로 정답 음성으로부터 얼마나 멀리 떨어져있는지를 나타내는 거리가 적혀있습니다. </h3>
+      <h3>음성 파일 아래쪽에는 목소리의 절대적인 수치값과 이를 바탕으로 정답 음성과의 유사도가 적혀있습니다. </h3>
       <h3>정답과 가장 비슷한 음성을 찾아주세요.</h3>
 
-      <div style="display: flex; justify-content: center;">
+      <div style="display: flex; justify-content: center; font-size: 16px; margin-top: 6px;">
         {% for label in feature_labels %}
-          <span>#{{label}} &nbsp</span>
+          <span># {{label}} &nbsp</span>
         {% endfor %}
       </div>
       <div id="original_voice">
@@ -100,7 +101,7 @@
           </audio>
           <div class="audio-result-container">
             <div>
-              <span class="bold">정답으로부터의 거리: </span> <span>{{data.euclidean}}</span>
+              <span class="bold">유사도: </span> <span>{{data.euclidean}}</span>
             </div>
             
           </div>
