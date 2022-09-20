@@ -32,18 +32,22 @@
 <body>
 <div id="topLine">
   <div id="header">
-    <h1><span>목소리</span>변환<span>시스템</span></h1>
-    <h2>다음의 목소리를 듣고, 목소리를 표현하는 해쉬태그를 참고하여 정답 음성과 가장 가까운 목소리를 선택해주세요.</h2>
+    <h1><span>A</span>VO<span>TAR</span></h1>
+    <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
+    <h2>연구원의 안내에 따라 다음의 정답 음성을 듣고 해당하는 해쉬태그를 중복 선택하여 검색해주세요.</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
       <h2>정답 음성</h2>
-      <h3>아래의 음성은 정답 음성입니다. 이 음성과 가장 닮은 목소리를 찾아주세요. </h3>
       <div id="original_voice">
+        <audio id="answer-voice-player" controls src="https://docs.google.com/uc?export=open&id=1FPfZl_uQaVmImKWHkA2AzFAMEac_pIjH" type='audio/mp3'">
+        </audio>
+        <!--원본
         <audio id="answer-voice-player" controls src="{{original_audio_url}}">
         </audio>
+        -->
         <form method='POST'>
           {% csrf_token %}
             <label for="slow">
@@ -73,8 +77,8 @@
       </div>
 
       {% if top10_desc %}
-      <h2>해쉬태그 검색 결과</h2>
-      <h3>정답 음성을 듣고, 다음의 선택지 중에 정답 음성을 잘 나타내는 해쉬태그를 선택해주세요. 중복 선택이 가능합니다. 해쉬태그를 선택하여 검색한 결과와 유사도를 참고하여 가장 비슷한 목소리를 선택해주세요.</h3>
+      <h2>목소리 검색 결과</h2>
+      <h3 style="margin-top: 10px;">목소리의 수치값을 기준으로 계산한 유사도를 참고하여 다음 중 정답 음성과 가장 가까운 목소리를 선택해주세요.</h3>
       <div style="display: flex; justify-content: center; font-size: 16px; margin-top: 6px;">
     
         {% for label in feature_labels %}

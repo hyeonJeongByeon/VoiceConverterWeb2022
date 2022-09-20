@@ -24,7 +24,8 @@
 <body>
 <div id="topLine">
   <div id="header">
-    <h1><span>목소리</span>변환<span>시스템</span></h1>
+    <h1><span>A</span>VO<span>TAR</span></h1>
+    <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
     <h2>연구원의 안내에 따라 소통하고 싶은 목소리를 자유롭게 제작해주세요.</h2>
   </div>
 </div>
@@ -32,7 +33,7 @@
   <div id="wrapper">
     <div id="content">
       <h2>참가자님의 목소리</h2>
-      <h3>아래의 음성은 사전질문지를 통해 수집한 참가자님의 음성입니다.</h3>
+      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님의 음성입니다.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="original-voice" />
         <audio id="original-voice-player" controls>
@@ -53,7 +54,7 @@
       </div>
 
       <h2>닮고 싶은 목소리</h2>
-      <h3>아래의 음성은 사전질문지를 통해 수집한 참가자님이 닮고 싶어하는 사람의 목소리입니다.</h3>
+      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님이 닮고 싶어하는 사람의 목소리입니다.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="target-voice" />
         <audio id="target-voice-player" controls>
@@ -75,7 +76,7 @@
       
       <div class="adjust-voice-row">
         <div class="tooltip">반영도
-            <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다.</span>
+            <span class="tooltiptext">슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
         </div>
         <div class="range-bar">
             <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05" value="0">
@@ -235,61 +236,61 @@
                     <div class="tooltip" >음의 높이
                         <span class="tooltiptext">음의 높고 낮음을 의미합니다.</span>
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                     <div class="range-bar">
                         <input name="pitch" type="range" class="form-range" id="pitch" min="100" max="700">
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f1
                         <span class="tooltiptext">가장 낮은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                     <div class="range-bar">
                         <input name="f1" type="range" class="form-range" id="f1" min="0" max="1000">
                     </div> 
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f2
                         <span class="tooltiptext">두번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                     <div class="range-bar">
                         <input name="f2" type="range" class="form-range" id="f2" min="1000" max="2000">
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f3
                         <span class="tooltiptext">세번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                     <div class="range-bar">
                         <input name="f3" type="range" class="form-range" id="f3" min="2000" max="3000">
                     </div>
-                    <a id="play-pause-button" class="fa fa-play"></a>
+                    <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
                   <div class="tooltip">f4
                       <span class="tooltiptext">가장 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                   </div>
-                  <a id="play-pause-button" class="fa fa-play"></a>
+                  <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                   <div class="range-bar">
                       <input name="f4" type="range" class="form-range" id="f4" min="3000" max="4000">
                   </div>
-                  <a id="play-pause-button" class="fa fa-play"></a>
+                  <!--<a id="play-pause-button" class="fa fa-play"></a>-->
               </div>
               <div class="adjust-voice-row">
                 <div class="tooltip">늘어짐
                     <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
                 </div>
-                <a id="play-pause-button" class="fa fa-play"></a>
+                <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 <div class="range-bar">
                     <input name="duration" type="range" class="form-range" id="duration" min="0" max="3" step="0.01">
                 </div>
-                <a id="play-pause-button" class="fa fa-play"></a>
+                <!--<a id="play-pause-button" class="fa fa-play"></a>-->
               </div>
 
             </div>

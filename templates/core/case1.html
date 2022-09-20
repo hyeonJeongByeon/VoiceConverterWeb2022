@@ -24,20 +24,23 @@
 <body>
 <div id="topLine">
   <div id="header">
-    <h1><span>목소리</span>변환<span>시스템</span></h1>
-    <h2>다음의 목소리를 듣고 아래의 슬라이더를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
+    <h1><span>A</span>VO<span>TAR</span></h1>
+    <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
+    <h2>연구원의 안내에 따라 다음의 목소리를 듣고 반영도를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
       <h2>정답 음성</h2>
-      <h3>아래의 정답 음성은 원본 음성과 타겟 음성을 조합하여 제작된 음성입니다. 반영도 슬라이더를 움직여 정답 음성을 제작해주세요.</h3>
-      <div id="original_voice">
+      <div id="original_voice"> <!--eng511-->
+        <!--
+        <audio id="answer-voice-player" controls src="https://docs.google.com/uc?export=open&id=1Zdksjcg5lZ0tKbfyzjf_c5SojkFRpqXM" type='audio/mp3'">
+        </audio>
+        -->
         <input type="file" accept="audio/*" capture id="answer-voice" />
         <audio id="answer-voice-player" controls src="{{original_audio_url}}">
         </audio>
-          <!---
           <script>
             const answerVoiceUploader = document.getElementById('answer-voice');
             const answerVoicePlayer = document.getElementById('answer-voice-player');
@@ -51,7 +54,6 @@
  
             });
           </script>
-        -->
       </div>
 
       <!--
@@ -175,9 +177,25 @@
         </div>
 
       -->
-      <h2>원본 목소리</h2>
-      <h3>원본 음성을 들은 후 아래의 반영도 슬라이더를 조정하여 정답 음성에 가까운 목소리를 만들어주세요.</h3>
-      <div id="original_voice">
+      <h2>원본 음성</h2>
+      <div id="original_voice"><!--eng534-->
+        <!--
+        <audio id="answer-voice-player" controls src="https://docs.google.com/uc?export=open&id=1CJsIkO9u_uTak5bW-yu0mQwGCfVRCY3J" type='audio/mp3'">
+          <script>
+            const originalVoiceUploader = document.getElementById('original-voice');
+            const originalVoicePlayer = document.getElementById('original-voice-player');
+        
+            originalVoiceUploader.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+              
+              // Show audio
+              originalVoicePlayer.src = url;
+ 
+            });
+          </script>
+        </audio>
+        -->
         <input type="file" accept="audio/*" capture id="original-voice" />
         <audio id="original-voice-player" controls>
           <script>
@@ -196,9 +214,25 @@
         </audio>
       </div>
 
-      <h2>타겟 목소리</h2>
-      <h3>정답음성을 제작하는데에 사용된 타겟 목소리입니다.</h3>
+      <h2>타겟 음성</h2><!--eng126-->
       <div id="original_voice">
+        <!--
+        <audio id="answer-voice-player" controls src="https://docs.google.com/uc?export=open&id=1j9QIDqt1RGDhERadSr4NTrFqWLaG5ote" type='audio/mp3'>
+          <script>
+            const targetVoiceUploader = document.getElementById('target-voice');
+            const targetVoicePlayer = document.getElementById('target-voice-player');
+        
+            targetVoiceUploader.addEventListener('change', async function (e) {
+              const file = e.target.files[0];
+              const url = URL.createObjectURL(file);
+              
+              // Show audio
+              targetVoicePlayer.src = url;
+ 
+            });
+          </script>
+        </audio>
+        -->
         <input type="file" accept="audio/*" capture id="target-voice" />
         <audio id="target-voice-player" controls>
           <script>
@@ -220,7 +254,7 @@
       <form>
         <div class="adjust-voice-row">
             <div class="tooltip">반영도
-                <span class="tooltiptext">얼만큼 타겟 목소리에 가깝게 반영할 것인지를 결정합니다. 슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
+                <span class="tooltiptext">슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
             </div>
             <div class="range-bar">
                 <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05" value="0">

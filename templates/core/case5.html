@@ -27,29 +27,30 @@
 <body>
 <div id="topLine">
   <div id="header">
-    <h1><span>목소리</span>변환<span>시스템</span></h1>
-    <h2>다음의 목소리를 듣고, 목소리의 수치값을 참고하여 정답 음성과 가장 가까운 목소리를 선택해주세요.</h2>
+    <h1><span>A</span>VO<span>TAR</span></h1>
+    <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
+    <h2>연구원의 안내에 따라 다음의 정답 음성을 듣고 목소리의 수치값을 기준으로 계산한 유사도를 참고하여 정답 음성과 가장 가까운 목소리를 선택해주세요.</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
       <h2>정답 음성</h2>
-      <h3>아래의 음성은 정답 음성입니다. 이 음성과 가장 닮은 목소리를 찾아주세요.</h3>
       <div id="original_voice">
+        <audio id="answer-voice-player" controls src="https://docs.google.com/uc?export=open&id=1FPfZl_uQaVmImKWHkA2AzFAMEac_pIjH" type='audio/mp3'">
+        </audio>
+        <!--원본
         <audio id="answer-voice-player" controls src="{{original_audio_url}}">
         </audio>
+        -->
         <form method='POST'>
             {% csrf_token %}
-            <button type="submit">유사한 목소리 Top10</button>
+            <button type="submit">검색</button>
         </form>
       </div>
 
       {% if top10_desc %}
-      <h2>정답 음성과 가장 비슷한 10개 음성</h2>
-      <h3>아래의 목소리는 정답과 가장 비슷한 10개의 음성 목록입니다.</h3>
-      <h3>음성 파일 아래쪽에는 목소리의 절대적인 수치값과 이를 바탕으로 정답 음성과의 유사도가 적혀있습니다.</h3>
-      <h3>정답과 가장 비슷한 음성을 찾아주세요.</h3>
+      <h2>목소리 검색 결과</h2>
       <div id="original_voice">
         {% for data in top10_desc %}
         <div style="margin: 10px 0; width: 80%;">
