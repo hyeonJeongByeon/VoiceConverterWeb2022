@@ -1,3 +1,4 @@
+<!--case2 멘토님 수정버전-->
 {% load static %}
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -10,7 +11,7 @@
     }
     </style>
 <head>
-<title>Case 3</title>
+<title>Case 2</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -26,16 +27,19 @@
   <div id="header">
     <h1><span>A</span>VO<span>TAR</span></h1>
     <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
-    <h2>연구원의 안내에 따라 다음의 목소리를 듣고 반영도를 결정한 후, 슬라이더를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
+    <h2>연구원의 안내에 따라 다음의 목소리를 듣고 슬라이더를 조정하여 정답 음성에 최대한 가까운 목소리를 제작해주세요.</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
-    <div id="content">
+    <div id="content" style="display:flex;">
+      <div>
       <h2>정답 음성</h2>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="answer-voice" />
-        <audio id="answer-voice-player" controls>
+        <audio id="answer-voice-player" controls src="{{original_audio_url}}">
+        </audio>
+          
           <script>
             const answerVoiceUploader = document.getElementById('answer-voice');
             const answerVoicePlayer = document.getElementById('answer-voice-player');
@@ -48,63 +52,33 @@
               answerVoicePlayer.src = url;
  
             });
-          </script>
-        </audio>
+          </script>        
       </div>
 
       <h2>원본 음성</h2>
-      <h3></h3>
       <div id="original_voice">
-        <input type="file" accept="audio/*" capture id="original-voice" />
-        <audio id="original-voice-player" controls>
+        <input type="file" accept="audio/*" capture id="recorder" />
+        <audio id="player" controls>
           <script>
-            const originalVoiceUploader = document.getElementById('original-voice');
-            const originalVoicePlayer = document.getElementById('original-voice-player');
+            const recorder = document.getElementById('recorder');
+            const player = document.getElementById('player');
         
-            originalVoiceUploader.addEventListener('change', async function (e) {
+            recorder.addEventListener('change', async function (e) {
               const file = e.target.files[0];
               const url = URL.createObjectURL(file);
-              
               // Show audio
-              originalVoicePlayer.src = url;
- 
-            });
-          </script>
-        </audio>
-      </div>
+              player.src = url;
 
-      <h2>타겟 음성</h2>
-      <div id="original_voice">
-        <input type="file" accept="audio/*" capture id="target-voice" />
-        <audio id="target-voice-player" controls>
-          <script>
-            const targetVoiceUploader = document.getElementById('target-voice');
-            const targetVoicePlayer = document.getElementById('target-voice-player');
-        
-            targetVoiceUploader.addEventListener('change', async function (e) {
-              const file = e.target.files[0];
-              const url = URL.createObjectURL(file);
-              
-              // Show audio
-              targetVoicePlayer.src = url;
- 
+              // Send file to server
+              let formData = new FormData();           
+              formData.append("audio", file);
+              await fetch('/', {
+                method: "POST", 
+                body: formData
+              });  
             });
           </script>
         </audio>
-      </div>
-      
-      <div class="adjust-voice-row">
-        <div class="tooltip">반영도
-            <span class="tooltiptext">슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
-        </div>
-        <a>0</a>
-        <div class="range-bar">
-            <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05" value="0">
-        </div>
-        <a>100</a>
-    </div>
-      <div class="subbtn-container">
-        <button type="button" id="init-btn" class="half-btn"> 초기화 </button>
       </div>
       <!--
       <h2>(삭제예정)자신의 목소리를 녹음하여 업로드해주세요</h2>
@@ -241,25 +215,26 @@
         -->
       
       <h2> 목소리 속성 조절 </h2>
-      <h3></h3>
+      <h3 style="margin-top:8px;">아래의 슬라이더는 원본 음성에 맞게 초기화되어있습니다. 슬라이더를 좌우로 움직여 정답 음성에 가까워지도록 조절해주세요.</h3>
       <!--
       <div class="subbtn-container">
         <button type="button" id="switch-gender-btn"> 성별 반전 </button>
         <button type="button" id="switch-child-btn"> 아이목소리 버전 </button>
       </div>
-      -->
+    -->
 
       <div id="slider_div">
-        <form >
+        <form>
             <div class="adjust-voice">
                 <div class="adjust-voice-row">
                     <div class="tooltip" >음의 높이
                         <span class="tooltiptext">음의 높고 낮음을 의미합니다.</span>
                     </div>
-                    <a>100</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>100</a>
                     <div class="range-bar">
                         <input name="pitch" type="range" class="form-range" id="pitch" min="100" max="700">
+                        <div id="pitch-text"> 0 </div>
                     </div>
                     <a>700</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
@@ -268,8 +243,8 @@
                     <div class="tooltip">f1
                         <span class="tooltiptext">가장 낮은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
-                    <a>0000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>0000</a>
                     <div class="range-bar">
                         <input name="f1" type="range" class="form-range" id="f1" min="0" max="1000">
                     </div> 
@@ -280,8 +255,8 @@
                     <div class="tooltip">f2
                         <span class="tooltiptext">두번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
-                    <a>1000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>1000</a>
                     <div class="range-bar">
                         <input name="f2" type="range" class="form-range" id="f2" min="1000" max="2000">
                     </div>
@@ -292,8 +267,8 @@
                     <div class="tooltip">f3
                         <span class="tooltiptext">세번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
-                    <a>2000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>2000</a>
                     <div class="range-bar">
                         <input name="f3" type="range" class="form-range" id="f3" min="2000" max="3000">
                     </div>
@@ -304,8 +279,8 @@
                   <div class="tooltip">f4
                       <span class="tooltiptext">가장 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                   </div>
-                  <a>3000</a>
                   <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                  <a>3000</a>
                   <div class="range-bar">
                       <input name="f4" type="range" class="form-range" id="f4" min="3000" max="4000">
                   </div>
@@ -316,15 +291,14 @@
                 <div class="tooltip">늘어짐
                     <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
                 </div>
-                <a>0.0</a>
                 <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                <a>0.0</a>
                 <div class="range-bar">
                     <input name="duration" type="range" class="form-range" id="duration" min="0" max="3" step="0.01">
                 </div>
                 <a>3.0</a>
                 <!--<a id="play-pause-button" class="fa fa-play"></a>-->
-              </div>
-
+            </div>
             </div>
 
             <div id="">
@@ -340,34 +314,29 @@
 
 
       </div>
+    </div>
         <h2> 변환된 음성</h2>
         <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
         </div>
 
-
         <script type="text/javascript">
-
-          async function makeFileFromUrl(url) {
-            let response = await fetch(url);
-            let data = await response.blob();
-            let metadata = {
-              type: 'audio/*'
-            };
-            let file = new File([data], "manipulated.wav", metadata)
-            return file
-          }
+          var pitchInput = document.getElementById('pitch');
+          var f1Input = document.getElementById('f1');
+          var f2Input = document.getElementById('f2');
+          var f3Input = document.getElementById('f3');
+          var f4Input = document.getElementById('f4');
+          var durationInput = document.getElementById('duration');
 
           var recoderInput = document.getElementById('recorder');
 
           var manipulatedVoiceContainer = document.getElementById('manipulated-voice-container')
 
           function insertResultVoice(params) {
-            const {manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value, durationValue, reflectValue} = params;
-            
+            const {manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value, durationValue} = params;
             // Insert sound 
             manipulatedVoiceContainer.innerHTML = `
             <div style="margin: 10px 0; width: 80%;">
-              <audio id="player" controls src=${manipulated_sound_url} style="width: 100%;">
+              <audio id="player" controls src=${manipulated_sound_url} style="width:100%;">
               </audio>
               <div class="audio-result-container">
                 <div>
@@ -387,9 +356,6 @@
                 </div>
                 <div>
                   <span class="bold">duration: </span> <span>${durationValue}</span>
-                </div>
-                <div>
-                  <span class="bold">reflect: </span> <span>${reflectValue}</span>
                 </div>
               </div>
             </div>
@@ -411,29 +377,24 @@
             var f4Value = f4Input.value;
             console.log(f4Value);
             var durationValue = durationInput.value;
-            var reflectValue = 0;
 
-            // Make inited_audio file
-            const url = localStorage.getItem('inited_audio_url')
-            const audio = await makeFileFromUrl(url)
+            const file = recoderInput.files[0];
 
             // Send file to server
             let formData = new FormData();           
-            formData.append("audio", audio); 
+            formData.append("audio", file);
             formData.append("pitchValue", pitchValue);
             formData.append("f1Value", f1Value);
             formData.append("f2Value", f2Value);
             formData.append("f3Value", f3Value);
             formData.append("f4Value", f4Value);
             formData.append("durationValue", durationValue);
-            formData.append("reflectValue", reflectValue);
             formData.append("originalPitchValue", localStorage.getItem('original_pitch'));
             formData.append("originalF1Value", localStorage.getItem('original_f1'));
             formData.append("originalF2Value", localStorage.getItem('original_f2'));
             formData.append("originalF3Value", localStorage.getItem('original_f3'));
             formData.append("originalF4Value", localStorage.getItem('original_f4'));
             formData.append("originalDurationValue", localStorage.getItem('original_duration'));
-            formData.append("originalReflectValue", localStorage.getItem('original_reflect'));
 
 
             response = await fetch('{% url "manipulate_audio" %}', {
@@ -451,7 +412,6 @@
               f3Value,
               f4Value,
               durationValue,
-              reflectValue,
             })
           })
 
@@ -468,70 +428,43 @@
         </script>
 
         <script>
-          var pitchInput = document.getElementById('pitch');
-          var f1Input = document.getElementById('f1');
-          var f2Input = document.getElementById('f2');
-          var f3Input = document.getElementById('f3');
-          var f4Input = document.getElementById('f4');
-          var durationInput = document.getElementById('duration');
-          var reflectInput = document.getElementById('reflect');
+          recoderInput.addEventListener('change', handleAudioFileUpload)
 
+            async function handleAudioFileUpload() {
+              const file = recoderInput.files[0];
 
-          // Init button logic
-          var initBtn = document.getElementById('init-btn');
-          initBtn.addEventListener('click', async function() {
-            var originalAudio = originalVoiceUploader.files[0];
-            var targetAudio = targetVoiceUploader.files[0];
-            var reflectValue = reflectInput.value;
+              // Send file to server
+              await uploadFileToServer(file)
+            }
+
+            async function uploadFileToServer(audio) {
+              let formData = new FormData();           
+              formData.append("audio", audio);
+
+              response = await fetch('{% url "calculate_audio_feature" %}', {
+                method: "POST", 
+                body: formData
+              });
   
-            // Send file to server
-            let formData = new FormData();           
-            formData.append("yourAudio", originalAudio);
-            formData.append("targetAudio", targetAudio);
-            formData.append("reflectValue", reflectValue);
+              var { pitch, f1, f2, f3, f4, duration } = await response.json()
 
+              pitchInput.value = pitch;
+              f1Input.value = f1;
+              f2Input.value = f2;
+              f3Input.value = f3;
+              f4Input.value = f4;
+              durationInput.value = 1;
+              //durationInput.value = duration;
 
-            response = await fetch('{% url "manipulate_audio_with_target" %}', {
-              method: "POST", 
-              body: formData
-            });
-  
-              var { manipulated_sound_url, pitchValue, f1Value, f2Value, f3Value, f4Value} = await response.json()
-
-              const durationValue = 1.0
-
-              insertResultVoice({
-                manipulated_sound_url,
-                pitchValue,
-                f1Value,
-                f2Value,
-                f3Value,
-                f4Value,
-                durationValue,
-                reflectValue,
-              })
-
-              pitchInput.value = pitchValue;
-              f1Input.value = f1Value;
-              f2Input.value = f2Value;
-              f3Input.value = f3Value;
-              f4Input.value = f4Value;
-              durationInput.value = durationValue;
-  
-              localStorage.setItem('original_pitch', pitchValue);
-              localStorage.setItem('original_f1', f1Value);
-              localStorage.setItem('original_f2', f2Value);
-              localStorage.setItem('original_f3', f3Value);
-              localStorage.setItem('original_f4', f4Value);
-              localStorage.setItem('original_duration', durationValue);
-              localStorage.setItem('inited_audio_url', manipulated_sound_url)
-
-          })
-
-
-
+              localStorage.setItem('original_pitch', pitch);
+              localStorage.setItem('original_f1', f1);
+              localStorage.setItem('original_f2', f2);
+              localStorage.setItem('original_f3', f3);
+              localStorage.setItem('original_f4', f4);
+              localStorage.setItem('original_duration', 1);
+              //localStorage.setItem('original_duration', duration);
+            }
         </script>
-
 
         <script>
           var switchGenderBtn = document.getElementById('switch-gender-btn');
@@ -571,6 +504,9 @@
         </script>
 
         <script>
+        function showVal(newVal){
+            document.getElementById("pitch-text").innerHTML=newVal;
+        }
           var switchChildBtn = document.getElementById('switch-child-btn');
 
           switchChildBtn.addEventListener('click', async function() {

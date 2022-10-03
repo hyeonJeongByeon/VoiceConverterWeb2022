@@ -253,9 +253,11 @@
 
       <form>
         <div class="adjust-voice-row">
+          <a>0</a>
             <div class="tooltip">반영도
                 <span class="tooltiptext">슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
             </div>
+            <a>100</a>
             <div class="range-bar">
                 <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05" value="0">
             </div>
@@ -277,7 +279,8 @@
 
             var submit_btn = document.getElementById('submit-btn');
             submit_btn.addEventListener('click', async function() {
-              var originalAudio = originalVoiceUploader.files[0];
+              try {
+                var originalAudio = originalVoiceUploader.files[0];
               var targetAudio = targetVoiceUploader.files[0];
               var reflectValue = reflectInput.value;
     
@@ -287,7 +290,8 @@
               formData.append("targetAudio", targetAudio);
               formData.append("reflectValue", reflectValue);
   
-  
+              document.getElementById('submit-btn').disabled = true;
+              
               response = await fetch('{% url "manipulate_audio_with_target" %}', {
                 method: "POST", 
                 body: formData
@@ -295,21 +299,30 @@
   
               var { manipulated_sound_url } = await response.json()
               // Insert sound 
+              document.getElementById('submit-btn').disabled = false;
               manipulatedVoiceContainer.innerHTML = `
               <div style="margin: 10px 0; width: 80%;">
                 <audio id="player" controls src=${manipulated_sound_url} style="width: 100%;">
                 </audio>
                 <div class="audio-result-container">
                   <div>
-                    <span class="bold">원본 음성: </span> <span>${parseInt(reflectValue * 100)}%</span>
+                    <span class="bold">원본 음성: </span> <span>${parseInt((1 - reflectValue) * 100)}%</span>
                   </div>
                   <div>
-                    <span class="bold">타겟 음성: </span> <span>${parseInt((1 - reflectValue) * 100)}%</span>
+                    <span class="bold">타겟 음성: </span> <span>${parseInt(reflectValue * 100)}%</span>
                   </div>
                 </div>
               </div>
               ${manipulatedVoiceContainer.innerHTML}
             `
+              } catch (error) {
+                console.error(error);
+                // expected output: ReferenceError: nonExistentFunction is not defined
+                // Note - error messages will vary depending on browser
+              }finally{
+                document.getElementById('submit-btn').disabled = false;
+              }
+              
             })
           </script>
         </audio>

@@ -1,3 +1,4 @@
+<!--Github 버전으로 바꿔놓음 Oct 02 4PM-->
 {% load static %}
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,7 +38,6 @@
         <input type="file" accept="audio/*" capture id="answer-voice" />
         <audio id="answer-voice-player" controls src="{{original_audio_url}}">
         </audio>
-          <!---
           <script>
             const answerVoiceUploader = document.getElementById('answer-voice');
             const answerVoicePlayer = document.getElementById('answer-voice-player');
@@ -51,7 +51,6 @@
  
             });
           </script>
-        -->
       </div>
 
       <h2>원본 음성</h2>
@@ -230,9 +229,11 @@
                         <span class="tooltiptext">음의 높고 낮음을 의미합니다.</span>
                     </div>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>100</a>
                     <div class="range-bar">
                         <input name="pitch" type="range" class="form-range" id="pitch" min="100" max="700">
                     </div>
+                    <a>700</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
@@ -240,9 +241,11 @@
                         <span class="tooltiptext">가장 낮은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>0000</a>
                     <div class="range-bar">
                         <input name="f1" type="range" class="form-range" id="f1" min="0" max="1000">
                     </div> 
+                    <a>1000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
@@ -250,19 +253,23 @@
                         <span class="tooltiptext">두번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                    <a>1000</a>
                     <div class="range-bar">
                         <input name="f2" type="range" class="form-range" id="f2" min="1000" max="2000">
                     </div>
+                    <a>2000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
                     <div class="tooltip">f3
                         <span class="tooltiptext">세번째로 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                     </div>
+                    <a>2000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                     <div class="range-bar">
                         <input name="f3" type="range" class="form-range" id="f3" min="2000" max="3000">
                     </div>
+                    <a>3000</a>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 </div>
                 <div class="adjust-voice-row">
@@ -270,9 +277,11 @@
                       <span class="tooltiptext">가장 높은 주파수에서 공명하는 지점을 의미합니다.</span>
                   </div>
                   <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                  <a>3000</a>
                   <div class="range-bar">
                       <input name="f4" type="range" class="form-range" id="f4" min="3000" max="4000">
                   </div>
+                  <a>4000</a>
                   <!--<a id="play-pause-button" class="fa fa-play"></a>-->
               </div>
               <div class="adjust-voice-row">
@@ -280,16 +289,16 @@
                     <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
                 </div>
                 <!--<a id="play-pause-button" class="fa fa-play"></a>-->
+                <a>0.0</a>
                 <div class="range-bar">
                     <input name="duration" type="range" class="form-range" id="duration" min="0" max="3" step="0.01">
                 </div>
+                <a>3.0</a>
                 <!--<a id="play-pause-button" class="fa fa-play"></a>-->
             </div>
             </div>
 
-            <div id="">
 
-            </div>
 
           <button type="button" id="reset-btn" class="half-btn"> 초기화 </button>
           <button type="button" id="submit-btn" class="half-btn"> 제출 </button>
@@ -325,7 +334,7 @@
               </audio>
               <div class="audio-result-container">
                 <div>
-                  <span class="bold">pitch: </span> <span>${parseInt(pitchValue)}</span>
+                  <span class="bold">음의 높이: </span> <span>${parseInt(pitchValue)}</span>
                 </div>
                 <div>
                   <span class="bold">f1: </span> <span>${parseInt(f1Value)}</span>
@@ -340,7 +349,7 @@
                   <span class="bold">f4: </span> <span>${parseInt(f4Value)}</span>
                 </div>
                 <div>
-                  <span class="bold">duration: </span> <span>${durationValue}</span>
+                  <span class="bold">늘어짐: </span> <span>${durationValue}</span>
                 </div>
               </div>
             </div>

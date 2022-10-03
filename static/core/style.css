@@ -194,6 +194,7 @@ padding:10px;
     justify-content: center;
     align-items: center;
     margin: 8px 0;
+	width: 100%;
 }
 
 .adjust-voice-row a {
@@ -202,7 +203,9 @@ padding:10px;
 }
 
 .adjust-voice-row .range-bar {
+
     margin-left: 8px;
+
 }
 
 .adjust-voice-row .tooltip {
@@ -288,6 +291,13 @@ form button{
 }
 form button:hover{
   background: #8bbc70;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 
 
