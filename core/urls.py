@@ -16,4 +16,5 @@ urlpatterns = [
     path('convert_text_to_audio/', convert_text_to_audio, name='convert_text_to_audio'),
     path('switch_gender/', switch_gender, name='switch_gender'),
     path('switch_child/', switch_child, name='switch_child'),
+    path('demo/', demo, name='demo'),
 ]

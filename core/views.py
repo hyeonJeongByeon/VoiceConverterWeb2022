@@ -337,3 +337,6 @@ def switch_child(request):
         'f3Value': manipulated_formant["F3 Mean"],
         'f4Value': manipulated_formant["F4 Mean"],
     })
+
+def demo(request):
+    return render(request, 'core/demo.html')
