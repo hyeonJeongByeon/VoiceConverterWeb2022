@@ -12,7 +12,7 @@ body {
 	text-align:left;
 }
 a {
-	color:#8bbc70;
+	color:#5770d7;
 	text-decoration:none;
 	}
 a:hover {
@@ -59,7 +59,7 @@ h3 {
 }
 
 #header h1 span{
-	color:#8bbc70;
+	color:#5770d7;
 	font-size:110%;
 }
 
@@ -87,7 +87,7 @@ h3 {
 #content h2 {
 	margin: 0 20px 0 20px;
 	padding: 20px 5px 0 5px;
-	border-bottom: 5px solid #8bbc70;
+	border-bottom: 5px solid #5770d7;
 }
 
 #content p {
@@ -148,7 +148,7 @@ padding:10px;
 
 #content form #send:hover, form #button2:hover {
 	background-position:center left; 
-	color:#8BBC70;
+	color:#5770d7;
 	font-weight:bold;
 }
 
@@ -286,11 +286,11 @@ form button{
   font-size: 17px;
   cursor: pointer;
   margin-top: 10px;
-  background: #8bbc70;
+  background: #5770d7;
   transition: 0.3s ease;
 }
 form button:hover{
-  background: #8bbc70;
+  background: #5770d7;
 }
 
 button:disabled,
@@ -372,7 +372,7 @@ button[disabled]{
 
   .subbtn-container button {
 	padding: 2px 4px;
-	border: 1px solid #8bbc70;
+	border: 1px solid #5770d7;
 	background-color: #ffffff;
 	margin-left: 4px;
 	border-radius: 4px;

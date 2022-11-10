@@ -10,9 +10,10 @@
     }
     </style>
 <head>
-<title>Case 4</title>
+<title>AVOTAR</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
-
+<link rel="favicon" href="core/favicon.ico">
+<link rel="icon" href="http://ec2-3-39-23-78.ap-northeast-2.compute.amazonaws.com/case4/" />
 <meta charset="utf-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--[if IE]>
@@ -26,14 +27,14 @@
   <div id="header">
     <h1><span>A</span>VO<span>TAR</span></h1>
     <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
-    <h2>연구원의 안내에 따라 소통하고 싶은 목소리를 자유롭게 제작해주세요.</h2>
+    <h2></h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
-      <h2>참가자님의 목소리</h2>
-      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님의 음성입니다.</h3>
+      <h2>원본 목소리</h2>
+      <h3 style="margin-top:8px;">변조하려는 목소리를 입력해주세요. 단 5초 분량의 짧은 문장이면 충분합니다.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="original-voice" />
         <audio id="original-voice-player" controls>
@@ -54,7 +55,7 @@
       </div>
 
       <h2>닮고 싶은 목소리</h2>
-      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님이 닮고 싶어하는 사람의 목소리입니다.</h3>
+      <h3 style="margin-top:8px;">평소에 듣기 좋다고 생각하거나, 닮고 싶은 목소리를 입력해주세요. 닮고 싶은 목소리가 없다면, 비워두셔도 괜찮습니다.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="target-voice" />
         <audio id="target-voice-player" controls>
@@ -304,7 +305,7 @@
 
 
       </div>
-        <h2> 변환된 음성</h2>
+        <h2> 커스터마이징된 음성</h2>
         <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
         </div>
 
