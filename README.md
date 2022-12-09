@@ -24,12 +24,7 @@ AVOTAR는 타겟 목소리와 원본 목소리를 입력값으로 사용합니�
 
 ([http://ec2-3-39-23-78.ap-northeast-2.compute.amazonaws.com/case4/](http://ec2-3-39-23-78.ap-northeast-2.compute.amazonaws.com/case4/))
 
-
-<img src="https://user-images.githubusercontent.com/45888389/206631219-85634094-89ee-4320-aa72-c2180119a78a.png" width="350" height="400"/> <img src="https://user-images.githubusercontent.com/45888389/206631215-e6999eb8-245b-4a34-b23e-dc890383acc4.png" width="350" height="400"/>
-![avotar1](https://user-images.githubusercontent.com/45888389/206631219-85634094-89ee-4320-aa72-c2180119a78a.png)
-
-
-![avotar2](https://user-images.githubusercontent.com/45888389/206631215-e6999eb8-245b-4a34-b23e-dc890383acc4.png)
+<img width="704" alt="Screenshot 2022-12-09 at 2 39 37 PM" src="https://user-images.githubusercontent.com/45888389/206632230-540677d5-4d77-40cc-9809-495c5a994fb6.png"> <img width="482" alt="Screenshot 2022-12-09 at 2 40 13 PM" src="https://user-images.githubusercontent.com/45888389/206632261-ce802982-e38c-4250-b43d-a5d64441bfbf.png">
 
 
 
