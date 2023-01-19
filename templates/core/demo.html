@@ -10,7 +10,7 @@
     }
     </style>
 <head>
-<title>Case 4</title>
+<title>AVOTAR Demo</title>
 <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}"/>
 
 <meta charset="utf-8">  
@@ -24,17 +24,32 @@
 <body>
 <div id="topLine">
   <div id="header">
-    <h1><span>A</span>VO<span>CUS</span></h1>
+    <h1><span>A</span>VO<span>TAR</span></h1>
+    <img src="../templates/core/avotar_logo.png" alt="AVOTAR">
     <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
-    <h2>연구원의 안내에 따라 소통하고 싶은 목소리를 자유롭게 제작해주세요.</h2>
+    <h2>소통하고 싶은 목소리를 자유롭게 제작해주세요.</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
-      <h2>참가자님의 목소리</h2>
-      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님의 음성입니다.</h3>
+      <h2>목소리 녹음</h2>
+      <h3 style="margin-top:8px;">아래의 버튼을 눌러 녹음해주세요.</h3>
+      <div id="controls">
+        <button id="recordButton">Record</button>
+        <button id="pauseButton" disabled>Pause</button>
+        <button id="stopButton" disabled>Stop</button>
+       </div>
+       <div id="formats">Format: start recording to see sample rate</div>
+       <p><strong>Recordings:</strong></p>
+       <ol id="recordingsList"></ol>
+       <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+       <script src="{% static 'core/recorder.js' %}"></script>
+       <script src="{% static 'core/app.js' %}"></script>
+       
+      <!--
       <div id="original_voice">
+        
         <input type="file" accept="audio/*" capture id="original-voice" />
         <audio id="original-voice-player" controls>
           <script>
@@ -51,10 +66,11 @@
             });
           </script>
         </audio>
+      
       </div>
-
+      -->
       <h2>닮고 싶은 목소리</h2>
-      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님이 닮고 싶어하는 사람의 목소리입니다.</h3>
+      <h3 style="margin-top:8px;">닮고 싶은 사람의 음성 파일을 업로드해주세요. 음성 파일의 분량은 5초 이내면 충분합니다.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="target-voice" />
         <audio id="target-voice-player" controls>
@@ -75,7 +91,7 @@
       </div>
       
       <div class="adjust-voice-row">
-        <div class="tooltip">Voice Reflection
+        <div class="tooltip">반영도
             <span class="tooltiptext">슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
         </div>
         <div class="range-bar">
@@ -84,7 +100,7 @@
 
     </div>
       <div class="subbtn-container">
-        <button type="button" id="init-btn" class="half-btn"> Set Value </button>
+        <button type="button" id="init-btn" class="half-btn"> 설정 </button>
       </div>
       <!--
       <h2>(삭제예정)자신의 목소리를 녹음하여 업로드해주세요</h2>
@@ -220,7 +236,7 @@
         </div>
         -->
       
-      <h2> Voice Parameter Control </h2>
+      <h2> 목소리 속성 조절 </h2>
       <h3></h3>
       <!--
       <div class="subbtn-container">
@@ -233,7 +249,7 @@
         <form >
             <div class="adjust-voice">
                 <div class="adjust-voice-row">
-                    <div class="tooltip" >pitch
+                    <div class="tooltip" >음의 높이
                         <span class="tooltiptext">음의 높고 낮음을 의미합니다.</span>
                     </div>
                     <!--<a id="play-pause-button" class="fa fa-play"></a>-->
@@ -283,7 +299,7 @@
                   <!--<a id="play-pause-button" class="fa fa-play"></a>-->
               </div>
               <div class="adjust-voice-row">
-                <div class="tooltip">duration
+                <div class="tooltip">늘어짐
                     <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
                 </div>
                 <!--<a id="play-pause-button" class="fa fa-play"></a>-->
@@ -295,8 +311,8 @@
 
             </div>
 
-          <button type="button" id="reset-btn" class="half-btn"> Reset </button>
-          <button type="button" id="submit-btn" class="half-btn"> Submit </button>
+          <button type="button" id="reset-btn" class="half-btn"> 초기화 </button>
+          <button type="button" id="submit-btn" class="half-btn"> 제출 </button>
 
           </form>
           <script src="https://use.fontawesome.com/66a8bce253.js"></script>
@@ -304,7 +320,7 @@
 
 
       </div>
-        <h2> Customized Voice </h2>
+        <h2> 변환된 음성</h2>
         <div style="margin-top: 30px; margin-bottom: 30px;" id="manipulated-voice-container">
         </div>
 
@@ -313,7 +329,9 @@
 
           async function makeFileFromUrl(url) {
             let response = await fetch(url);
+            console.log(response)
             let data = await response.blob();
+            console.log(data)
             let metadata = {
               type: 'audio/*'
             };
@@ -444,13 +462,22 @@
           // Init button logic
           var initBtn = document.getElementById('init-btn');
           initBtn.addEventListener('click', async function() {
+            var recordedAudio = document.getElementById('recordingsList');
+            var selectedAudio = '';
+            for (const audio of recordedAudio.children) {
+              if(audio.children[2].checked)
+              { 
+                selectedAudio = audio.children[0];
+              }
+            }
+            var recordedAudioFile = await makeFileFromUrl(selectedAudio.src);
             var originalAudio = originalVoiceUploader.files[0];
             var targetAudio = targetVoiceUploader.files[0];
             var reflectValue = reflectInput.value;
   
             // Send file to server
             let formData = new FormData();           
-            formData.append("yourAudio", originalAudio);
+            formData.append("yourAudio", recordedAudioFile);
             formData.append("targetAudio", targetAudio);
             formData.append("reflectValue", reflectValue);
 
