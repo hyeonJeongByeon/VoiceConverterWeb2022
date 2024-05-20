@@ -26,14 +26,14 @@
   <div id="header">
     <h1><span>A</span>VO<span>CUS</span></h1>
     <!--<h1><span>목소리</span>변환<span>시스템</span></h1>-->
-    <h2>연구원의 안내에 따라 소통하고 싶은 목소리를 자유롭게 제작해주세요.</h2>
+    <h2>AVOCUS is a voice customization system for online personas</h2>
   </div>
 </div>
 <div id="outerwarrper">
   <div id="wrapper">
     <div id="content">
-      <h2>참가자님의 목소리</h2>
-      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님의 음성입니다.</h3>
+      <h2>Voice Input</h2>
+      <h3 style="margin-top:8px;">Upload your recorded voice.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="original-voice" />
         <audio id="original-voice-player" controls>
@@ -53,8 +53,8 @@
         </audio>
       </div>
 
-      <h2>닮고 싶은 목소리</h2>
-      <h3 style="margin-top:8px;">아래의 음성은 사전질문지를 통해 수집한 참가자님이 닮고 싶어하는 사람의 목소리입니다.</h3>
+      <h2>Target Voice</h2>
+      <h3 style="margin-top:8px;">Upload your wannabe voice.</h3>
       <div id="original_voice">
         <input type="file" accept="audio/*" capture id="target-voice" />
         <audio id="target-voice-player" controls>
@@ -76,7 +76,7 @@
       
       <div class="adjust-voice-row">
         <div class="tooltip">Voice Reflection
-            <span class="tooltiptext">슬라이더를 오른쪽으로 움직일수록 타겟 음성에 가까워집니다.</span>
+            <span class="tooltiptext">Move the slider to the right to get closer to your target voice .</span>
         </div>
         <div class="range-bar">
             <input name="reflect" type="range" class="form-range" id="reflect" min="0" max="1" step="0.05" value="0">
@@ -284,7 +284,7 @@
               </div>
               <div class="adjust-voice-row">
                 <div class="tooltip">duration
-                    <span class="tooltiptext">말하는 속도를 조절합니다. 값이 클수록 느려집니다.</span>
+                    <span class="tooltiptext">Duration controls the speech rate.</span>
                 </div>
                 <!--<a id="play-pause-button" class="fa fa-play"></a>-->
                 <div class="range-bar">
